@@ -1,4 +1,5 @@
 const products = [
+
   {
     id: 1,
     nombre: "Vela Aromática",
@@ -6,6 +7,7 @@ const products = [
     categoria: "Velas",
     imagen: "https://via.placeholder.com/200"
   },
+
   {
     id: 2,
     nombre: "Alfombra Boho",
@@ -13,6 +15,7 @@ const products = [
     categoria: "Alfombras",
     imagen: "https://via.placeholder.com/200"
   },
+
   {
     id: 3,
     nombre: "Sahumerio Natural",
@@ -20,13 +23,15 @@ const products = [
     categoria: "Sahumerios",
     imagen: "https://via.placeholder.com/200"
   },
+
   {
     id: 4,
-    nombre: "Vela de Lavanda",
+    nombre: "Vela Lavanda",
     precio: 6000,
     categoria: "Velas",
     imagen: "https://via.placeholder.com/200"
   },
+
   {
     id: 5,
     nombre: "Alfombra Beige",
@@ -34,6 +39,7 @@ const products = [
     categoria: "Alfombras",
     imagen: "https://via.placeholder.com/200"
   }
+
 ]
 
 export default products

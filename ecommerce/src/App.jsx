@@ -1,51 +1,85 @@
-import { useState } from "react"
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom"
 
 import Navbar from "./components/Navbar"
-import Hero from "./components/Hero"
-import SearchBar from "./components/SearchBar"
-import Products from "./components/Products"
+import FloatingWhatsApp from "./components/FloatingWhatsapp"
+import Footer from "./components/Footer"
 
-import productsData from "./data/products"
+import Home from "./pages/Home"
+import Login from "./pages/Login"
+import Register from "./pages/Register"
+import ProductDetail from "./pages/ProductDetail"
+import Cart from "./pages/CartPage"
+import FavoritesPage from "./pages/FavoritesPage"
+import CheckoutAddress from "./pages/CheckoutAddress"
+import SearchResults from "./pages/SearchResults"
+import ProductsPage from "./pages/ProductsPage"
 
 function App() {
 
-  const [search, setSearch] = useState("")
-
-  const [selectedCategory, setSelectedCategory] = useState("")
-
-  const filteredProducts = productsData.filter((product) => {
-
-    const matchesSearch =
-      product.nombre
-        .toLowerCase()
-        .includes(search.toLowerCase())
-
-    const matchesCategory =
-      selectedCategory === "" ||
-      product.categoria === selectedCategory
-
-    return matchesSearch && matchesCategory
-  })
-
   return (
-    <>
 
-      <Navbar
-        setSelectedCategory={setSelectedCategory}
-      />
+    <BrowserRouter>
 
-      <Hero />
+      <Navbar />
 
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-      />
+      <Routes>
 
-      <Products
-        products={filteredProducts}
-      />
+        <Route
+          path="/"     
+          element={<Home />}
+        />
 
-    </>
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+
+        <Route
+          path="/product/:id"
+          element={<ProductDetail />}
+        />
+
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
+
+        <Route
+          path="/favorites"
+          element={<FavoritesPage />}
+        />
+
+        <Route
+          path="/checkout/address"
+          element={<CheckoutAddress />}
+        />
+
+        <Route
+          path="/products"
+          element={<ProductsPage />}
+        />
+
+        <Route
+          path="/search"
+          element={<SearchResults />}
+        />
+
+      </Routes>
+
+      <FloatingWhatsApp />
+
+      <Footer />
+
+    </BrowserRouter>
   )
 }
 
