@@ -82,69 +82,91 @@ function FavoritesPage() {
 const styles = {
 
   page: {
-
     padding: "40px"
   },
 
   title: {
-
     marginBottom: "30px",
-
-    color: "#3E2C23"
+    color: "#3E2C23",
+    textAlign:
+      window.innerWidth < 768
+        ? "center"
+        : "left",
   },
 
   card: {
-
     display: "flex",
+    flexDirection:
+      window.innerWidth < 768
+        ? "column"
+        : "row",
+    alignItems:
+      window.innerWidth < 768
+        ? "center"
+        : "center",
+    textAlign:
+      window.innerWidth < 768
+        ? "center"
+        : "left",
 
-    alignItems: "center",
-
-    gap: "25px",
-
+    gap: "20px",
     backgroundColor: "#fff",
-
-    padding: "20px",
-
+    padding:
+      window.innerWidth < 768
+        ? "15px"
+        : "20px",
     borderRadius: "15px",
-
     marginBottom: "20px",
-
     boxShadow:
-      "0 2px 10px rgba(0,0,0,0.08)"
+      "0 2px 10px rgba(0,0,0,0.08)",
+    width: "100%",
+    boxSizing: "border-box"
   },
 
   image: {
-
-    width: "120px",
-
-    height: "120px",
-
+    width:
+      window.innerWidth < 768
+        ? "100%"
+        : "120px",
+    maxWidth:
+      window.innerWidth < 768
+        ? "300px"
+        : "120px",
+    height:
+      window.innerWidth < 768
+        ? "200px"
+        : "120px",
     objectFit: "cover",
-
     borderRadius: "10px"
   },
 
   info: {
-
-    flex: 1
+    flex: 1,
+    width: "100%"
   },
 
   price: {
-
-    color: "#3E2C23"
+    color: "#3E2C23",
+    wordBreak: "break-word"
   },
 
   removeButton: {
-
     padding: "10px 15px",
-
     border: "none",
-
     borderRadius: "8px",
-
     backgroundColor: "#D6B79A",
+    cursor: "pointer",
+    width:
+      window.innerWidth < 768
+        ? "100%"
+        : "auto",
+    maxWidth: "250px"
+  },
 
-    cursor: "pointer"
+  emptyText: {
+    textAlign: "center",
+    color: "#777",
+    marginTop: "50px"
   }
 
 }

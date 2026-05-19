@@ -1,9 +1,10 @@
-import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import { useFavorites } from "../context/FavoritesContext"
 import { useNavigate } from "react-router-dom"
 import { useFilter } from "../context/FilterContext"
+import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 function Navbar() {
 
@@ -39,6 +40,21 @@ function Navbar() {
   setSearchQuery
   } = useFilter()
 
+  const [scrolled, setScrolled] = useState(false)
+
+useEffect(() => {
+
+  const handleScroll = () => {
+    setScrolled(window.scrollY > 20)
+  }
+
+  window.addEventListener("scroll", handleScroll)
+
+  return () =>
+    window.removeEventListener("scroll", handleScroll)
+
+  }, [])
+
   return (
 
     <>
@@ -47,13 +63,22 @@ function Navbar() {
         style={{
           ...styles.navbar,
 
-          padding: isMobile
-            ? "15px"
-            : "18px 35px",
+          backgroundColor:
+            scrolled
+              ? "rgba(255,255,255,0.95)"
+              : "transparent",
 
-          gap: isMobile
-            ? "15px"
-            : "0px"
+          backdropFilter:
+            scrolled
+              ? "blur(10px)"
+              : "none",
+
+          boxShadow:
+            scrolled
+              ? "0 4px 20px rgba(0,0,0,0.08)"
+              : "none",
+
+          transition: "0.3s"
         }}
       >
 
@@ -198,79 +223,153 @@ function Navbar() {
 
           {/* FAVORITOS */}
 
-          <Link
-            to="/favorites"
-            style={styles.iconContainer}
+          <motion.div
+
+            whileTap={{ scale: 0.9 }}
+
+            animate={{
+              y:
+                favorites.length > 0
+                  ? [0, -5, 0]
+                  : 0
+            }}
+
+            transition={{
+              duration: 0.4
+            }}
           >
 
-            <button
-
-              style={styles.iconButton}
-
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform =
-                  "scale(1.15)"
-              }}
-
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform =
-                  "scale(1)"
-              }}
+            <Link
+              to="/favorites"
+              style={styles.iconContainer}
             >
 
-              ⭐
+              <button
 
-            </button>
+                style={styles.iconButton}
 
-            {favorites.length > 0 && (
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform =
+                    "scale(1.15)"
+                }}
 
-              <span style={styles.badge}>
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform =
+                    "scale(1)"
+                }}
+              >
 
-                {favorites.length}
+                ⭐
 
-              </span>
+              </button>
 
-            )}
+              {favorites.length > 0 && (
 
-          </Link>
+                <motion.span
+
+                  style={styles.badge}
+
+                  key={favorites.length}
+
+                  initial={{
+                    scale: 0
+                  }}
+
+                  animate={{
+                    scale: 1.2
+                  }}
+
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 10
+                  }}
+                >
+
+                  {favorites.length}
+
+                </motion.span>
+
+              )}
+
+            </Link>
+
+          </motion.div>
 
           {/* CARRITO */}
 
-          <Link
-            to="/cart"
-            style={styles.iconContainer}
+          <motion.div
+
+            whileTap={{ scale: 0.9 }}
+
+            animate={{
+              y:
+                totalItems > 0
+                  ? [0, -5, 0]
+                  : 0
+            }}
+
+            transition={{
+              duration: 0.4
+            }}
           >
 
-            <button
-
-              style={styles.iconButton}
-
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform =
-                  "scale(1.15)"
-              }}
-
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform =
-                  "scale(1)"
-              }}
+            <Link
+              to="/cart"
+              style={styles.iconContainer}
             >
 
-              🛒
+              <button
 
-            </button>
+                style={styles.iconButton}
 
-            {totalItems > 0 && (
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform =
+                    "scale(1.15)"
+                }}
 
-              <span style={styles.badge}>
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform =
+                    "scale(1)"
+                }}
+              >
 
-                {totalItems}
+                🛒
 
-              </span>
+              </button>
 
-            )}
+              {totalItems > 0 && (
 
-          </Link>
+                <motion.span
+
+                  style={styles.badge}
+
+                  key={totalItems}
+
+                  initial={{
+                    scale: 0
+                  }}
+
+                  animate={{
+                    scale: 1.2
+                  }}
+
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 10
+                  }}
+                >
+
+                  {totalItems}
+
+                </motion.span>
+
+              )}
+
+            </Link>
+
+          </motion.div>
 
         </div>
 
@@ -429,13 +528,17 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    flexWrap: "wrap",
+    padding: "20px 30px",
     backgroundColor: "#F5EEE6",
     boxShadow:
       "0 2px 10px rgba(0,0,0,0.08)",
     position: "sticky",
     top: 0,
-    zIndex: 999
+    zIndex: 999,
+    maxWidth: "1400px",
+    margin: "0 auto",
+    transition: "0.3s",
+    backdropFilter: "blur(10px)"
   },
 
   left: {
@@ -452,29 +555,40 @@ const styles = {
   right: {
     display: "flex",
     alignItems: "center",
-    gap: "10px",
-    flexWrap: "wrap"
+    gap: "12px",
   },
 
   logo: {
-    height: "55px",
-    width: "55px",
+    height: "58px",
+    width: "58px",
     objectFit: "cover",
-    borderRadius: "50%"
+    borderRadius: "50%",
+    boxShadow:
+      "0 4px 12px rgba(0,0,0,0.08)"
   },
 
   navLink: {
     textDecoration: "none",
     color: "#3E2C23",
     fontWeight: "500",
+    fontSize: "15px",
+    position: "relative",
     transition: "0.3s"
   },
 
   search: {
-    padding: "10px 15px",
-    borderRadius: "10px",
-    border: "1px solid #ccc",
+    padding: "12px 18px",
+    borderRadius: "14px",
+    border: "1px solid rgba(0,0,0,0.08)",
     outline: "none",
+    backgroundColor:
+    "rgba(255,255,255,0.8)",
+    backdropFilter:
+    "blur(10px)",
+    boxShadow:
+    "0 4px 12px rgba(0,0,0,0.04)",
+    fontSize: "14px",
+    transition: "0.3s"
   },
 
   iconButton: {
@@ -482,7 +596,9 @@ const styles = {
     border: "none",
     background: "none",
     cursor: "pointer",
-    transition: "0.3s"
+    transition: "0.3s",
+    padding: "8px",
+    borderRadius: "12px"
   },
 
   iconContainer: {
@@ -507,7 +623,9 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    boxShadow:
+      "0 2px 10px rgba(0,0,0,0.15)"
   },
 
   sidebar: {
@@ -521,49 +639,60 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     gap: "15px",
-    transition: "0.35s ease",
-    zIndex: 1000
+    transition:
+    "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+    zIndex: 1000,
+    boxShadow:
+      "0 0 30px rgba(0,0,0,0.1)"
   },
 
   closeButton: {
     alignSelf: "flex-end",
     border: "none",
     background: "none",
-    fontSize: "20px",
+    fontSize: "22px",
     cursor: "pointer"
   },
 
   categoryButton: {
-    padding: "12px",
+    padding: "14px",
     border: "none",
-    borderRadius: "10px",
+    borderRadius: "14px",
     backgroundColor: "#D6B79A",
     cursor: "pointer",
     transition: "0.3s",
     color: "#3E2C23",
     fontWeight: "500",
     fontSize: "16px",
+    textAlign: "center",
   },
 
   subCategoryButton: {
-    padding: "10px",
+    width: "90%",
+    padding: "12px",
     border: "none",
-    borderRadius: "10px",
+    borderRadius: "12px",
     backgroundColor: "#E8D9C8",
     color: "#3E2C23",
     cursor: "pointer",
     transition: "0.3s",
-    marginLeft: "10px"
+    marginLeft: "10px",
+    fontWeight: "500",
+    fontSize: "15px",
+    textAlign: "center",
   },
 
   mobileLink: {
+    width: "100%",
     textDecoration: "none",
     backgroundColor: "#D6B79A",
     color: "#3E2C23",
-    padding: "12px",
-    borderRadius: "10px",
+    padding: "14px",
+    borderRadius: "14px",
     fontWeight: "500",
-    textAlign: "center"
+    fontSize: "16px",
+    textAlign: "center",
+    boxSizing: "border-box"
   },
 
 }

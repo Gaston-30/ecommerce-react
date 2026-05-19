@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
+import { motion } from "framer-motion"
 
 function CheckoutAddress() {
 
@@ -35,7 +36,24 @@ function CheckoutAddress() {
 
   return (
 
-    <div style={styles.page}>
+    <motion.div
+
+      style={styles.page}
+
+      initial={{
+        opacity: 0,
+        y: 20
+      }}
+
+      animate={{
+        opacity: 1,
+        y: 0
+      }}
+
+      transition={{
+        duration: 0.4
+      }}
+    >
 
       <form
         style={styles.form}
@@ -58,6 +76,24 @@ function CheckoutAddress() {
           style={styles.input}
 
           required
+
+          onFocus={(e) => {
+
+            e.target.style.border =
+              "1px solid #8B5E3C"
+
+            e.target.style.boxShadow =
+              "0 0 0 4px rgba(139,94,60,0.15)"
+          }}
+
+          onBlur={(e) => {
+
+            e.target.style.border =
+              "1px solid rgba(0,0,0,0.08)"
+
+            e.target.style.boxShadow =
+              "0 4px 10px rgba(0,0,0,0.03)"
+          }}
         />
 
         <input
@@ -72,6 +108,24 @@ function CheckoutAddress() {
           style={styles.input}
 
           required
+
+          onFocus={(e) => {
+
+            e.target.style.border =
+              "1px solid #8B5E3C"
+
+            e.target.style.boxShadow =
+              "0 0 0 4px rgba(139,94,60,0.15)"
+          }}
+
+          onBlur={(e) => {
+
+            e.target.style.border =
+              "1px solid rgba(0,0,0,0.08)"
+
+            e.target.style.boxShadow =
+              "0 4px 10px rgba(0,0,0,0.03)"
+          }}
         />
 
         <input
@@ -86,6 +140,24 @@ function CheckoutAddress() {
           style={styles.input}
 
           required
+
+          onFocus={(e) => {
+
+            e.target.style.border =
+              "1px solid #8B5E3C"
+
+            e.target.style.boxShadow =
+              "0 0 0 4px rgba(139,94,60,0.15)"
+          }}
+
+          onBlur={(e) => {
+
+            e.target.style.border =
+              "1px solid rgba(0,0,0,0.08)"
+
+            e.target.style.boxShadow =
+              "0 4px 10px rgba(0,0,0,0.03)"
+          }}
         />
 
         <input
@@ -100,6 +172,24 @@ function CheckoutAddress() {
           style={styles.input}
 
           required
+
+          onFocus={(e) => {
+
+            e.target.style.border =
+              "1px solid #8B5E3C"
+
+            e.target.style.boxShadow =
+              "0 0 0 4px rgba(139,94,60,0.15)"
+          }}
+
+          onBlur={(e) => {
+
+            e.target.style.border =
+              "1px solid rgba(0,0,0,0.08)"
+
+            e.target.style.boxShadow =
+              "0 4px 10px rgba(0,0,0,0.03)"
+          }}
         />
 
         <button
@@ -113,79 +203,59 @@ function CheckoutAddress() {
 
       </form>
 
-    </div>
+    </motion.div>
   )
 }
 
 const styles = {
 
   page: {
-
     minHeight: "100vh",
-
     display: "flex",
-
     justifyContent: "center",
-
     alignItems: "center",
-
     backgroundColor: "#F8F5F2"
   },
 
   form: {
-
     width: "400px",
-
     backgroundColor: "white",
-
     padding: "40px",
-
     borderRadius: "20px",
-
     boxShadow:
       "0 2px 15px rgba(0,0,0,0.08)",
-
     display: "flex",
-
     flexDirection: "column",
-
     gap: "20px"
   },
 
   title: {
-
     textAlign: "center",
-
     color: "#3E2C23"
   },
 
   input: {
-
     padding: "15px",
-
-    borderRadius: "10px",
-
-    border: "1px solid #ccc",
-
-    fontSize: "15px"
+    borderRadius: "12px",
+    border:
+    "1px solid rgba(0,0,0,0.08)",
+    backgroundColor:
+    "rgba(255,255,255,0.9)",
+    boxShadow:
+    "0 4px 10px rgba(0,0,0,0.03)",
+    fontSize: "15px",
+    outline: "none",
+    transition: "0.3s"
   },
 
   button: {
-
     padding: "15px",
-
     border: "none",
-
     borderRadius: "10px",
-
     backgroundColor: "#8B5E3C",
-
     color: "white",
-
     fontSize: "16px",
-
     cursor: "pointer",
-
     transition: "0.3s"
   }
 

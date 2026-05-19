@@ -14,20 +14,33 @@ function ProductCard({ product }) {
 
         style={styles.card}
 
-        whileHover={{
-          y: -10,
-          scale: 1.02
-        }}
+        initial={{ opacity: 0, y: 20 }}
 
-        transition={{
-          duration: 0.3
+        whileInView={{ opacity: 1, y: 0 }}
+
+        transition={{ duration: 0.25 }}
+
+        viewport={{ once: true }}
+
+        whileHover={{
+          y: -8,
+          scale: 1.02,
+          boxShadow:
+          "0 18px 40px rgba(0,0,0,0.12)"
         }}
       >
 
-        <img
+        <motion.img
           src={product.imagen}
           alt={product.nombre}
           style={styles.image}
+          whileHover={{
+            scale: 1.08
+          }}
+
+          transition={{
+            duration: 0.3
+          }}
         />
 
         <div style={styles.info}>
@@ -40,13 +53,21 @@ function ProductCard({ product }) {
             ${product.precio}
           </p>
 
-          <button
+          <motion.button
             style={styles.button}
+
+            whileHover={{
+            scale: 1.04
+            }}
+
+            whileTap={{
+              scale: 0.96
+            }}
           >
 
             Ver detalle
 
-          </button>
+          </motion.button>
 
         </div>
 
@@ -72,7 +93,7 @@ const styles = {
     borderRadius: "18px",
     overflow: "hidden",
     boxShadow:
-      "0 4px 15px rgba(0,0,0,0.08)",
+    "0 10px 30px rgba(0,0,0,0.08)",
     transition: "0.3s",
     cursor: "pointer"
   },

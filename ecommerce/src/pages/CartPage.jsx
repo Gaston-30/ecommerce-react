@@ -51,7 +51,7 @@ function CartPage() {
 
         {cartItems.length === 0 ? (
 
-          <p>
+          <p style={styles.emptyText}>
             No hay productos en el carrito.
           </p>
 
@@ -276,7 +276,10 @@ const styles = {
       : "row",
     gap: "40px",
     padding: "40px",
-    alignItems: "flex-start",
+    alignItems:
+      window.innerWidth < 768
+        ? "center"
+        : "flex-start",
     paddingBottom:
       window.innerWidth < 768
         ? "170px"
@@ -289,7 +292,11 @@ const styles = {
 
   title: {
     marginBottom: "30px",
-    color: "#3E2C23"
+    color: "#3E2C23",
+    textAlign:
+      window.innerWidth < 768
+        ? "center"
+        : "left",
   },
 
   card: {
@@ -300,8 +307,12 @@ const styles = {
         : "row",
     alignItems:
       window.innerWidth < 768
-        ? "flex-start"
+        ? "center"
         : "center",
+    textAlign:
+      window.innerWidth < 768
+        ? "center"
+        : "left",
     gap: "20px",
     backgroundColor: "#fff",
     padding:
@@ -321,14 +332,17 @@ const styles = {
       window.innerWidth < 768
         ? "100%"
         : "130px",
+    maxWidth:
+      window.innerWidth < 768
+        ? "300px"
+        : "130px",
     height:
       window.innerWidth < 768
-        ? "180px"
+        ? "200px"
         : "130px",
     objectFit: "cover",
     borderRadius: "10px"
   },
-
   info: {
     flex: 1,
     marginLeft:
@@ -364,12 +378,10 @@ const styles = {
 
   price: {
     color: "#3E2C23",
-
     alignSelf:
       window.innerWidth < 768
-        ? "flex-end"
+        ? "center"
         : "center",
-
     marginTop:
       window.innerWidth < 768
         ? "10px"
@@ -398,7 +410,8 @@ const styles = {
       "0 -2px 10px rgba(0,0,0,0.1)",
     borderTopLeftRadius: "20px",
     borderTopRightRadius: "20px",
-    zIndex: 999
+    zIndex: 999,
+    boxSizing: "border-box",
   },
 
   row: {
@@ -410,6 +423,7 @@ const styles = {
   shake: {
     animation: "shake 0.3s"
   },
+
   checkoutButton: {
     width: "100%",
     marginTop: "25px",
@@ -432,6 +446,11 @@ const styles = {
     fontWeight: "bold"
   },
 
+  emptyText: {
+    textAlign: "center",
+    color: "#777",
+    marginTop: "50px"
+  },
 }
 
 export default CartPage

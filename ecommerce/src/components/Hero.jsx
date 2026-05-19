@@ -8,6 +8,19 @@ function Hero() {
 
       <motion.div
 
+        initial={{ scale: 1.1 }}
+
+        animate={{ scale: 1 }}
+
+        transition={{
+          duration: 6
+        }}
+
+        style={styles.background}
+      />
+
+      <motion.div
+
         initial={{ opacity: 0, y: 40 }}
 
         animate={{ opacity: 1, y: 0 }}
@@ -57,32 +70,23 @@ function Hero() {
 const styles = {
 
   hero: {
-
     height: "70vh",
-
-    backgroundImage:
-      "url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200')",
-
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    overflow: "hidden",
+    position: "relative"
   },
 
   overlay: {
-
     backgroundColor: "rgba(0,0,0,0.35)",
-
-    padding: "40px 60px",
-
+    padding:
+      window.innerWidth < 768
+        ? "30px"
+        : "50px 70px",  
     borderRadius: "20px",
-
     textAlign: "center",
-
     color: "white",
-
     backdropFilter: "blur(3px)"
   },
 
@@ -94,8 +98,16 @@ const styles = {
   subtitle: {
     marginTop: "15px",
     fontSize: "20px"
-  }
+  },
 
+  background: {
+  position: "absolute",
+  inset: 0,
+  backgroundImage:
+    "url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200')",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+}
 }
 
 export default Hero

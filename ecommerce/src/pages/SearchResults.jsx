@@ -6,6 +6,8 @@ import products from "../data/Products"
 
 import { useFilter } from "../context/FilterContext"
 
+import FiltersPanel from "../components/FiltersPanel"
+
 function SearchResults() {
 
   const {
@@ -20,12 +22,6 @@ function SearchResults() {
 
   const [maxPrice, setMaxPrice] =
     useState("")
-
-    const [showFilters, setShowFilters] =
-    useState(false)
-
-    const isMobile =
-        window.innerWidth <= 768
 
     let filteredProducts =
     products.filter((product) =>
@@ -98,89 +94,21 @@ function SearchResults() {
 
       <div style={styles.content}>
 
-  {isMobile && (
+        {/* FILTROS */}
 
-    <button
+          <FiltersPanel
 
-      style={styles.filterToggle}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
 
-      onClick={() =>
-        setShowFilters(!showFilters)
-      }
-    >
+            minPrice={minPrice}
+            setMinPrice={setMinPrice}
 
-      Filtros
+            maxPrice={maxPrice}
+            setMaxPrice={setMaxPrice}
 
-      {" "}
-
-      {showFilters ? "▲" : "▼"}
-
-    </button>
-
-  )}
-
-  {/* FILTROS */}
-
-  {(!isMobile || showFilters) && (
-
-    <div style={styles.filters}>
-
-          <h3>
-            Filtros
-          </h3>
-
-          <select
-            style={styles.select}
-            value={sortBy}
-            onChange={(e) =>
-              setSortBy(e.target.value)
-            }
-          >
-
-            <option value="">
-              Ordenar por
-            </option>
-
-            <option value="low-high">
-              Menor precio
-            </option>
-
-            <option value="high-low">
-              Mayor precio
-            </option>
-
-            <option value="newest">
-              Más nuevos
-            </option>
-
-            <option value="oldest">
-              Más viejos
-            </option>
-
-          </select>
-
-          <input
-            type="number"
-            placeholder="Precio mínimo"
-            value={minPrice}
-            onChange={(e) =>
-              setMinPrice(e.target.value)
-            }
-            style={styles.input}
           />
 
-          <input
-            type="number"
-            placeholder="Precio máximo"
-            value={maxPrice}
-            onChange={(e) =>
-              setMaxPrice(e.target.value)
-            }
-            style={styles.input}
-          />
-
-        </div>
-  )}
         {/* PRODUCTOS */}
 
         {filteredProducts.length === 0 ? (
@@ -222,11 +150,14 @@ const styles = {
 
   content: {
     display: "flex",
+    gap:
+      window.innerWidth < 768
+        ? "15px"
+        : "35px",
     flexDirection:
         window.innerWidth <= 768
         ? "column"
         : "row",
-    gap: "35px",
     alignItems: "flex-start",
     width: "100%"
   },
@@ -235,48 +166,6 @@ const styles = {
     textAlign: "center",
     marginBottom: "40px",
     color: "#3E2C23"
-  },
-
-  filters: {
-    width:
-    window.innerWidth <= 768
-        ? "100%"
-        : "260px",
-    backgroundColor: "white",
-    padding: "25px",
-    borderRadius: "15px",
-    boxShadow:
-      "0 2px 10px rgba(0,0,0,0.08)",
-
-    display: "flex",
-    flexDirection: "column",
-    gap: "18px",
-
-    position: "sticky",
-    top: "120px"
-  },
-
-  filterToggle: {
-    padding: "12px",
-    border: "none",
-    borderRadius: "10px",
-    backgroundColor: "#D6B79A",
-    color: "#3E2C23",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginBottom: "20px"
-    },
-
-  select: {
-    padding: "12px",
-    borderRadius: "10px",
-    border: "1px solid #ccc"
-  },
-
-  input: {
-    padding: "12px",
-    borderRadius: "10px",
-    border: "1px solid #ccc"
   },
 
   grid: {
