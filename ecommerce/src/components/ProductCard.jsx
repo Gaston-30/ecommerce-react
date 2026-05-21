@@ -81,29 +81,44 @@ const styles = {
 
   link: {
     textDecoration: "none",
-    color: "black"
+    color: "black",
+    display: "block",
+    width:
+      window.innerWidth < 768
+        ? "160px"
+        : "240px",
+    flexShrink: 0
   },
 
   card: {
     width:
-    window.innerWidth < 768
-      ? "100%"
-      : "240px",
+      window.innerWidth < 768
+        ? "160px"
+        : "240px",
+    minWidth:
+      window.innerWidth < 768
+        ? "160px"
+        : "240px",
+    maxWidth:
+      window.innerWidth < 768
+        ? "160px"
+        : "240px",
     backgroundColor: "white",
     borderRadius: "18px",
     overflow: "hidden",
     boxShadow:
-    "0 10px 30px rgba(0,0,0,0.08)",
+      "0 4px 15px rgba(0,0,0,0.08)",
     transition: "0.3s",
-    cursor: "pointer"
+    cursor: "pointer",
+    flexShrink: 0
   },
 
   image: {
     width: "100%",
     height:
-    window.innerWidth < 768
-      ? "180px"
-      : "260px",
+      window.innerWidth < 768
+        ? "160px"
+        : "260px",
     objectFit: "cover"
   },
 
@@ -113,25 +128,40 @@ const styles = {
 
   title: {
     color: "#3E2C23",
-    marginBottom: "10px"
+    marginBottom: "10px",
+    fontSize:
+      window.innerWidth < 768
+        ? "14px"
+        : "18px"
   },
 
   price: {
-    fontSize: "18px",
+    fontSize:
+      window.innerWidth < 768
+        ? "15px"
+        : "18px",
     fontWeight: "bold",
     color: "#8B5E3C"
   },
 
   button: {
     marginTop: "15px",
-    padding: "10px 18px",
+    padding:
+      window.innerWidth < 768
+        ? "10px"
+        : "12px",
     border: "none",
     borderRadius: "10px",
     backgroundColor: "#8B5E3C",
     color: "white",
     cursor: "pointer",
-    transition: "0.3s"
-  }
+    transition: "0.3s",
+    width: "100%",
+    fontSize:
+      window.innerWidth < 768
+        ? "13px"
+        : "15px"
+  },
 
 }
 

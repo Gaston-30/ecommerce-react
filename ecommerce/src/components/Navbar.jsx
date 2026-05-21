@@ -184,13 +184,7 @@ useEffect(() => {
               }
             }}
 
-            style={{
-              ...styles.search,
-
-              width: isMobile
-                ? "120px"
-                : "180px"
-            }}
+            style={{...styles.search}}
           />
 
           {/* LOGIN */}
@@ -528,23 +522,31 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "20px 30px",
+    flexWrap: "nowrap",
+    padding:
+      window.innerWidth < 768
+        ? "12px 14px"
+        : "20px 30px",
     backgroundColor: "#F5EEE6",
     boxShadow:
       "0 2px 10px rgba(0,0,0,0.08)",
     position: "sticky",
     top: 0,
     zIndex: 999,
-    maxWidth: "1400px",
-    margin: "0 auto",
+    width: "100%",
     transition: "0.3s",
-    backdropFilter: "blur(10px)"
+    backdropFilter: "blur(10px)",
+    overflow: "hidden"
   },
 
   left: {
     display: "flex",
     alignItems: "center",
-    gap: "20px"
+    gap:
+      window.innerWidth < 768
+        ? "10px"
+        : "20px",
+    flexShrink: 0
   },
 
   center: {
@@ -555,16 +557,28 @@ const styles = {
   right: {
     display: "flex",
     alignItems: "center",
-    gap: "12px",
+    gap:
+      window.innerWidth < 768
+        ? "4px"
+        : "12px",
+    flexShrink: 1,
+    minWidth: 0
   },
 
   logo: {
-    height: "58px",
-    width: "58px",
+    height:
+      window.innerWidth < 768
+        ? "42px"
+        : "58px",
+    width:
+      window.innerWidth < 768
+        ? "42px"
+        : "58px",
     objectFit: "cover",
     borderRadius: "50%",
     boxShadow:
-      "0 4px 12px rgba(0,0,0,0.08)"
+      "0 4px 12px rgba(0,0,0,0.08)",
+    flexShrink: 0
   },
 
   navLink: {
@@ -577,28 +591,46 @@ const styles = {
   },
 
   search: {
-    padding: "12px 18px",
+    width:
+      window.innerWidth < 768
+        ? "90px"
+        : "180px",
+    padding:
+      window.innerWidth < 768
+        ? "8px 10px"
+        : "12px 18px",
     borderRadius: "14px",
     border: "1px solid rgba(0,0,0,0.08)",
     outline: "none",
     backgroundColor:
-    "rgba(255,255,255,0.8)",
+      "rgba(255,255,255,0.8)",
     backdropFilter:
-    "blur(10px)",
+      "blur(10px)",
     boxShadow:
-    "0 4px 12px rgba(0,0,0,0.04)",
-    fontSize: "14px",
-    transition: "0.3s"
+      "0 4px 12px rgba(0,0,0,0.04)",
+    fontSize:
+      window.innerWidth < 768
+        ? "12px"
+        : "14px",
+    transition: "0.3s",
+    minWidth: 0
   },
 
   iconButton: {
-    fontSize: "24px",
+    fontSize:
+      window.innerWidth < 768
+        ? "18px"
+        : "24px",
     border: "none",
     background: "none",
     cursor: "pointer",
     transition: "0.3s",
-    padding: "8px",
-    borderRadius: "12px"
+    padding:
+      window.innerWidth < 768
+        ? "4px"
+        : "8px",
+    borderRadius: "12px",
+    flexShrink: 0
   },
 
   iconContainer: {
@@ -613,13 +645,22 @@ const styles = {
     position: "absolute",
     top: "-5px",
     right: "-5px",
-    minWidth: "18px",
-    height: "18px",
+    minWidth:
+      window.innerWidth < 768
+        ? "14px"
+        : "18px",
+    height:
+      window.innerWidth < 768
+        ? "14px"
+        : "18px",
     padding: "2px",
     borderRadius: "50%",
     backgroundColor: "#8B5E3C",
     color: "white",
-    fontSize: "11px",
+    fontSize:
+      window.innerWidth < 768
+        ? "9px"
+        : "11px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -633,7 +674,7 @@ const styles = {
     top: 0,
     left: 0,
     width: "260px",
-    height: "100vh",
+    minHeight: "100vh",
     backgroundColor: "#f5eee6",
     padding: "25px",
     display: "flex",

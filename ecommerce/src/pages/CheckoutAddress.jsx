@@ -192,6 +192,22 @@ function CheckoutAddress() {
           }}
         />
 
+        <a
+
+          href="https://www.correoargentino.com.ar/formularios/cpa"
+
+          target="_blank"
+
+          rel="noopener noreferrer"
+
+          style={styles.cpLink}
+
+        >
+
+          No sé mi código postal
+
+        </a>
+
         <button
           type="submit"
           style={styles.button}
@@ -257,7 +273,15 @@ const styles = {
     fontSize: "16px",
     cursor: "pointer",
     transition: "0.3s"
-  }
+  },
+
+  cpLink: {
+    fontSize: "14px",
+    color: "#8B5E3C",
+    textDecoration: "none",
+    marginTop: "-10px",
+    transition: "0.3s"
+  },
 
 }
 

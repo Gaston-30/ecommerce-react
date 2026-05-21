@@ -5,7 +5,13 @@ const products = [
     nombre: "Vela Aromática",
     precio: 5000,
     categoria: "Velas",
-    imagen: "https://via.placeholder.com/200"
+    imagenes: [
+      "url1",
+      "url2",
+      "url3"
+    ],
+    descripcion:
+      "Descripción breve..."
   },
 
   {
@@ -13,7 +19,13 @@ const products = [
     nombre: "Alfombra Boho",
     precio: 15000,
     categoria: "Alfombras",
-    imagen: "https://via.placeholder.com/200"
+    imagenes: [
+      "url1",
+      "url2",
+      "url3"
+    ],
+    descripcion:
+      "Descripción breve..."
   },
 
   {
@@ -21,7 +33,13 @@ const products = [
     nombre: "Sahumerio Natural",
     precio: 3500,
     categoria: "Sahumerios",
-    imagen: "https://via.placeholder.com/200"
+    imagenes: [
+      "url1",
+      "url2",
+      "url3"
+    ],
+    descripcion:
+      "Descripción breve..."
   },
 
   {
@@ -29,7 +47,13 @@ const products = [
     nombre: "Vela Lavanda",
     precio: 6000,
     categoria: "Velas",
-    imagen: "https://via.placeholder.com/200"
+    imagenes: [
+      "url1",
+      "url2",
+      "url3"
+    ],
+    descripcion:
+      "Descripción breve..."
   },
 
   {
@@ -37,7 +61,13 @@ const products = [
     nombre: "Alfombra Beige",
     precio: 18000,
     categoria: "Alfombras",
-    imagen: "https://via.placeholder.com/200"
+    imagenes: [
+      "url1",
+      "url2",
+      "url3"
+    ],
+    descripcion:
+      "Descripción breve..."
   }
 
 ]
