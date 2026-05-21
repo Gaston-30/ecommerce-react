@@ -83,9 +83,11 @@ function ProductDetail() {
         src={selectedImage}
         alt={product.nombre}
         style={styles.image}
-        whileHover={{
-          scale: 1.02
-        }}
+        whileHover={
+          !isMobile
+            ? { scale: 1.02 }
+            : {}
+        }
       />
 
       <div style={styles.info}>
@@ -242,7 +244,7 @@ function ProductDetail() {
 
       </div>
 
-      <div style={styles.similarSection}>
+     <div style={styles.similarSection}>
 
         <h2>
           Productos similares
@@ -258,23 +260,25 @@ function ProductDetail() {
 
             .map((p) => (
 
+          <div style={styles.cardWrapper}>
             <ProductCard
               key={p.id}
               product={p}
             />
+          </div>
 
           ))}
 
         </div>
 
       </div>
-
     </div>
 
   )
 }
 
-const isMobile = window.innerWidth < 768
+const isMobile =
+  window.matchMedia("(max-width: 768px)").matches
 
 const styles = {
 
@@ -304,7 +308,7 @@ const styles = {
         : "40px",
     padding:
       isMobile
-        ? "20px 12px"
+        ? "16px"
         : "80px 20px",
     width: "100%",
     maxWidth: "1400px",
@@ -344,17 +348,11 @@ const styles = {
     minWidth: 0
   },
 
-  quantityContainer: {
-    display: "flex",
-    alignItems: "center",
-    gap: "15px"
-  },
-
   cartButton: {
     padding:
       isMobile
-        ? "12px"
-        : "16px",
+        ? "10px"
+        : "14px",
     backgroundColor: "#8B5E3C",
     color: "white",
     border: "none",
@@ -391,8 +389,8 @@ const styles = {
   favoriteButton: {
     padding:
       isMobile
-        ? "12px"
-        : "16px",
+        ? "10px"
+        : "14px",
     border: "none",
     borderRadius: "14px",
     backgroundColor: "#D6B79A",
@@ -414,7 +412,10 @@ const styles = {
   },
     
   price: {
-    fontSize: "42px",
+    fontSize:
+      isMobile
+        ? "28px"
+        : "42px",
     color: "#3E2C23",
     fontWeight: "700"
   },
@@ -446,10 +447,8 @@ const styles = {
     backgroundColor: "#F8F5F2",
     padding: "12px 20px",
     borderRadius: "16px",
-    width:
-      isMobile
-        ? "100%"
-        : "fit-content"
+    width: "fit-content",
+    maxWidth: "100%"
   },
 
   quantityButton: {
@@ -537,26 +536,27 @@ const styles = {
   },
 
   similarSection: {
-    gridColumn: "1 / -1",
-    marginTop: "100px",
-    textAlign: "center"
+    marginTop:
+      isMobile
+        ? "40px"
+        : "100px",
+    textAlign: "center",
+    overflow: "hidden"
   },
 
   similarGrid: {
-    marginTop: "30px",
+    marginTop: "20px",
     display: "flex",
-    gap: "25px",
+    gap: "16px",
     overflowX: "auto",
+    overflowY: "hidden",
     scrollBehavior: "smooth",
     paddingBottom: "10px",
     alignItems: "stretch",
     width: "100%",
-    overflowX: "auto",
-    paddingInline:
-      isMobile
-        ? "10px"
-        : "0px",
-
+    boxSizing: "border-box",
+    paddingLeft: "0px",
+    paddingRight: "0px",
   },
 
   similarCard: {
@@ -581,11 +581,11 @@ const styles = {
   },
 
   cardWrapper: {
-    minWidth:
-      isMobile
-        ? "220px"
-        : "240px",
-    flexShrink: 0
+    width: "160px",
+    minWidth: "160px",
+    maxWidth: "160px",
+    flexShrink: 0,
+    overflow: "hidden"
   },
 
 }

@@ -22,21 +22,27 @@ function ProductCard({ product }) {
 
         viewport={{ once: true }}
 
-        whileHover={{
-          y: -8,
-          scale: 1.02,
-          boxShadow:
-          "0 18px 40px rgba(0,0,0,0.12)"
-        }}
+        whileHover={
+          !isMobile
+            ? {
+                y: -8,
+                scale: 1.02,
+                boxShadow:
+                  "0 18px 40px rgba(0,0,0,0.12)"
+              }
+            : {}
+        }
       >
 
         <motion.img
           src={product.imagen}
           alt={product.nombre}
           style={styles.image}
-          whileHover={{
-            scale: 1.08
-          }}
+          whileHover={
+            !isMobile
+              ? { scale: 1.08 }
+              : {}
+          }       
 
           transition={{
             duration: 0.3
@@ -56,9 +62,11 @@ function ProductCard({ product }) {
           <motion.button
             style={styles.button}
 
-            whileHover={{
-            scale: 1.04
-            }}
+            whileHover={
+              !isMobile
+                ? { scale: 1.04 }
+                : {}
+            }
 
             whileTap={{
               scale: 0.96
@@ -77,6 +85,9 @@ function ProductCard({ product }) {
   )
 }
 
+const isMobile =
+  window.matchMedia("(max-width: 768px)").matches
+
 const styles = {
 
   link: {
@@ -84,7 +95,7 @@ const styles = {
     color: "black",
     display: "block",
     width:
-      window.innerWidth < 768
+      isMobile
         ? "160px"
         : "240px",
     flexShrink: 0
@@ -92,20 +103,21 @@ const styles = {
 
   card: {
     width:
-      window.innerWidth < 768
+      isMobile
         ? "160px"
         : "240px",
     minWidth:
-      window.innerWidth < 768
+      isMobile
         ? "160px"
         : "240px",
     maxWidth:
-      window.innerWidth < 768
+      isMobile
         ? "160px"
         : "240px",
     backgroundColor: "white",
     borderRadius: "18px",
     overflow: "hidden",
+    boxSizing: "border-box",
     boxShadow:
       "0 4px 15px rgba(0,0,0,0.08)",
     transition: "0.3s",
@@ -116,7 +128,7 @@ const styles = {
   image: {
     width: "100%",
     height:
-      window.innerWidth < 768
+      isMobile
         ? "160px"
         : "260px",
     objectFit: "cover"
@@ -130,14 +142,14 @@ const styles = {
     color: "#3E2C23",
     marginBottom: "10px",
     fontSize:
-      window.innerWidth < 768
+      isMobile
         ? "14px"
         : "18px"
   },
 
   price: {
     fontSize:
-      window.innerWidth < 768
+      isMobile
         ? "15px"
         : "18px",
     fontWeight: "bold",
@@ -147,7 +159,7 @@ const styles = {
   button: {
     marginTop: "15px",
     padding:
-      window.innerWidth < 768
+      isMobile
         ? "10px"
         : "12px",
     border: "none",
@@ -158,7 +170,7 @@ const styles = {
     transition: "0.3s",
     width: "100%",
     fontSize:
-      window.innerWidth < 768
+      isMobile
         ? "13px"
         : "15px"
   },
