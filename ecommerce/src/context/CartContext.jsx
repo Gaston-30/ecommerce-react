@@ -31,40 +31,25 @@ export function CartProvider({ children }) {
   }, [cartItems])
 
   const addToCart = (product, quantity) => {
+    setCartItems(prev => {
+      const existingProduct = prev.find((item) => item.id === product.id)
+      const currentQty = existingProduct ? existingProduct.quantity : 0
+      const maxAllowed = product.stock - currentQty
 
-    const existingProduct =
-      cartItems.find(
-        (item) => item.id === product.id
-      )
+      if (maxAllowed <= 0) return prev
 
-    if (existingProduct) {
+      const actualQty = Math.min(quantity, maxAllowed)
 
-      const updatedCart =
-        cartItems.map((item) =>
-
+      if (existingProduct) {
+        return prev.map((item) =>
           item.id === product.id
-
-            ? {
-                ...item,
-                quantity:
-                  item.quantity + quantity
-              }
-
+            ? { ...item, quantity: item.quantity + actualQty }
             : item
         )
-
-      setCartItems(updatedCart)
-
-    } else {
-
-      setCartItems([
-        ...cartItems,
-        {
-          ...product,
-          quantity
-        }
-      ])
-    }
+      } else {
+        return [...prev, { ...product, quantity: actualQty }]
+      }
+    })
   }
 
   const removeFromCart = (id) => {
@@ -77,42 +62,19 @@ export function CartProvider({ children }) {
   }
 
   const increaseQuantity = (id) => {
-
-    setCartItems(
-
-      cartItems.map((item) =>
-
-        item.id === id
-
-          ? {
-              ...item,
-              quantity: item.quantity + 1
-            }
-
-          : item
-      )
-    )
+    setCartItems(prev => prev.map((item) =>
+      item.id === id
+        ? { ...item, quantity: item.quantity < item.stock ? item.quantity + 1 : item.quantity }
+        : item
+    ))
   }
 
   const decreaseQuantity = (id) => {
-
-    setCartItems(
-
-      cartItems.map((item) =>
-
-        item.id === id
-
-          ? {
-              ...item,
-              quantity:
-                item.quantity > 1
-                  ? item.quantity - 1
-                  : 1
-            }
-
-          : item
-      )
-    )
+    setCartItems(prev => prev.map((item) =>
+      item.id === id
+        ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 }
+        : item
+    ))
   }
 
   const totalItems =

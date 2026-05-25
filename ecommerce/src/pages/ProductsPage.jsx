@@ -2,11 +2,13 @@ import { useState } from "react"
 
 import ProductCard from "../components/ProductCard"
 
-import productsData from "../data/Products"
+import useProducts from "../hooks/useProducts"
 
 import FiltersPanel from "../components/FiltersPanel"
 
 function ProductsPage() {
+
+  const { products: productsData, loading } = useProducts()  
 
   const productsPerPage = 24
 
@@ -22,6 +24,7 @@ function ProductsPage() {
     const [maxPrice, setMaxPrice] =
     useState("")
 
+if (loading) return <p>Cargando...</p>
 
   const startIndex =
     (currentPage - 1) * productsPerPage

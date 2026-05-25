@@ -14,9 +14,10 @@ import Register from "./pages/Register"
 import ProductDetail from "./pages/ProductDetail"
 import Cart from "./pages/CartPage"
 import FavoritesPage from "./pages/FavoritesPage"
-import CheckoutAddress from "./pages/CheckoutAddress"
 import SearchResults from "./pages/SearchResults"
 import ProductsPage from "./pages/ProductsPage"
+import CompleteProfile from "./pages/CompleteProfile"
+import CheckoutConfirm from "./pages/CheckoutConfirm"
 
 function App() {
 
@@ -59,8 +60,8 @@ function App() {
         />
 
         <Route
-          path="/checkout/address"
-          element={<CheckoutAddress />}
+          path="/checkout/confirm"
+          element={<CheckoutConfirm />}
         />
 
         <Route
@@ -71,6 +72,16 @@ function App() {
         <Route
           path="/search"
           element={<SearchResults />}
+        />
+
+        <Route
+          path="/complete-profile"
+          element={<CompleteProfile />}
+        />
+
+        <Route
+          path="/perfil"
+          element={<CompleteProfile />}
         />
 
       </Routes>

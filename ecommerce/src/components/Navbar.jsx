@@ -5,8 +5,12 @@ import { useNavigate } from "react-router-dom"
 import { useFilter } from "../context/FilterContext"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
+import { useAuth } from "../context/AuthContext"
+import useProfile from "../hooks/useProfile"
 
 function Navbar() {
+  const { user } = useAuth()
+  const { profile } = useProfile()
 
   const [menuOpen, setMenuOpen] =
     useState(false)
@@ -190,29 +194,24 @@ useEffect(() => {
           {/* LOGIN */}
 
           <Link
-            to="/login"
-            style={styles.iconContainer}
+            to={user ? "/perfil" : "/login"}
+            style={{ ...styles.iconContainer, gap: "8px", textDecoration: "none" }}
           >
-
             <button
-
               style={styles.iconButton}
-
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform =
-                  "scale(1.15)"
-              }}
-
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform =
-                  "scale(1)"
-              }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.15)"}
+              onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
             >
-
-              👤
-
+              {profile?.avatar_url
+                ? <img src={profile.avatar_url} alt="avatar" style={{ width: "28px", height: "28px", borderRadius: "50%", objectFit: "cover" }} />
+                : "👤"
+              }
             </button>
-
+            {user && profile?.username && (
+              <span style={{ fontSize: "14px", color: "#3E2C23", fontWeight: "500", textDecoration: "underline" }}>
+                {profile.username}
+              </span>
+            )}
           </Link>
 
           {/* FAVORITOS */}

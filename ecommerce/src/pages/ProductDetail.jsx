@@ -1,11 +1,12 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 import { useState } from "react"
 
-import productsData from "../data/Products"
+import useProducts from "../hooks/useProducts"
 import ProductCard from "../components/ProductCard"
 import { useCart } from "../context/CartContext"
 import { useFavorites } from "../context/FavoritesContext"
+import { useAuth } from "../context/AuthContext"
 
 import { motion } from "framer-motion"
 
@@ -14,16 +15,17 @@ function ProductDetail() {
 
   const { id } = useParams()
 
-  const product = productsData.find(
-    (p) => p.id === Number(id)
-  )
-  const [selectedImage, setSelectedImage] =
-    useState(product.imagenes[0])
-  const [quantity, setQuantity] = useState(1)
+  const navigate = useNavigate()
+  
+  const { user } = useAuth()
+
+  const { products, loading } = useProducts()
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+
+  const [quantity, setQuantity] = useState(1)  
 
   const [inCart, setInCart] = useState(false)
-
-  const { addToCart } = useCart()
 
   const {
 
@@ -35,12 +37,21 @@ function ProductDetail() {
 
   } = useFavorites()
 
+  const { addToCart } = useCart()
+
+  if (loading) return <p>Cargando...</p>
+
+  const product = products.find(
+    (p) => p.id === Number(id)
+  )
+
   if (!product) {
     return <h1>Producto no encontrado</h1>
   }
 
-  const cuotas =
-    (product.precio / 6).toFixed(2)
+  const selectedImage = product.imagenes[selectedImageIndex]
+  
+  const cuotas = (product.precio / 6).toFixed(2)
 
   return (
 
@@ -69,9 +80,7 @@ function ProductDetail() {
 
               }}
 
-              onClick={() =>
-                setSelectedImage(img)
-              }
+              onClick={() => setSelectedImageIndex(index)}
 
             />
 
@@ -168,20 +177,25 @@ function ProductDetail() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.96 }}
-            onClick={() =>
-              setQuantity(quantity + 1)
-            }
+            onClick={() => {
+              if (quantity < product.stock) setQuantity(quantity + 1)
+            }}
           >
             +
           </motion.button>
+
+          <p style={{ color: "#888", fontSize: "13px" }}>
+            {product.stock} unidades disponibles
+          </p>
 
         </div>
 
         <motion.button
           style={styles.cartButton}
           onClick={() => {
+            if (!user) { navigate("/register"); return }
+            if (inCart) { navigate("/cart"); return }
             addToCart(product, quantity)
-
             setInCart(true)
           }}
           whileHover={{ scale: 1.02 }}
@@ -189,7 +203,7 @@ function ProductDetail() {
         >
 
           {inCart
-            ? "En el carrito"
+            ? "Ver en carrito →"
             : "Agregar al carrito"}
 
         </motion.button>
@@ -202,13 +216,10 @@ function ProductDetail() {
           whileTap={{ scale: 0.96 }}
 
           onClick={() => {
-
+            if (!user) { navigate("/register"); return }
             if (isFavorite(product.id)) {
-
-              removeFromFavorites(product.id)
-
+              navigate("/favorites")
             } else {
-
               addToFavorites(product)
             }
           }}
@@ -216,7 +227,7 @@ function ProductDetail() {
 
           {isFavorite(product.id)
 
-            ? "❤️ En favoritos"
+            ? "❤️ Ver favoritos →"
 
             : "🤍 Agregar a favoritos"}
 
@@ -252,7 +263,7 @@ function ProductDetail() {
 
         <div style={styles.similarGrid}>
 
-          {productsData
+          {products
 
             .filter((p) => p.id !== product.id)
 
@@ -349,10 +360,7 @@ const styles = {
   },
 
   cartButton: {
-    padding:
-      isMobile
-        ? "10px"
-        : "14px",
+    padding: isMobile ? "10px" : "14px",
     backgroundColor: "#8B5E3C",
     color: "white",
     border: "none",
@@ -363,10 +371,7 @@ const styles = {
         ? "14px"
         : "15px",
     fontWeight: "600",
-    width:
-      isMobile
-        ? "100%"
-        : "fit-content",
+    width: isMobile ? "100%" : "320px",
     maxWidth:
       isMobile
         ? "100%"
@@ -387,10 +392,7 @@ const styles = {
   },
 
   favoriteButton: {
-    padding:
-      isMobile
-        ? "10px"
-        : "14px",
+    padding: isMobile ? "10px" : "14px",
     border: "none",
     borderRadius: "14px",
     backgroundColor: "#D6B79A",
@@ -401,10 +403,7 @@ const styles = {
         ? "14px"
         : "16px",
     transition: "0.3s",
-    width:
-      isMobile
-        ? "100%"
-        : "fit-content",
+    width: isMobile ? "100%" : "320px",
     maxWidth:
       isMobile
         ? "100%"
@@ -541,7 +540,8 @@ const styles = {
         ? "40px"
         : "100px",
     textAlign: "center",
-    overflow: "hidden"
+    overflow: "hidden",
+    gridArea: "similar",
   },
 
   similarGrid: {
@@ -581,9 +581,9 @@ const styles = {
   },
 
   cardWrapper: {
-    width: "160px",
-    minWidth: "160px",
-    maxWidth: "160px",
+    width: isMobile ? "160px" : "220px",
+    minWidth: isMobile ? "160px" : "220px",
+    maxWidth: isMobile ? "160px" : "220px",
     flexShrink: 0,
     overflow: "hidden"
   },

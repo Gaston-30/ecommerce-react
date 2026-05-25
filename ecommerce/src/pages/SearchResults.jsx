@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import ProductCard from "../components/ProductCard"
 
-import products from "../data/Products"
+import useProducts from "../hooks/useProducts"
 
 import { useFilter } from "../context/FilterContext"
 
@@ -10,10 +10,10 @@ import FiltersPanel from "../components/FiltersPanel"
 
 function SearchResults() {
 
-  const {
-    searchQuery
-  } = useFilter()
+  const { products, loading } = useProducts() 
 
+  const { searchQuery } = useFilter()
+  
   const [sortBy, setSortBy] =
     useState("")
 
@@ -23,6 +23,8 @@ function SearchResults() {
   const [maxPrice, setMaxPrice] =
     useState("")
 
+  if (loading) return <p>Cargando...</p>
+  
     let filteredProducts =
     products.filter((product) =>
 

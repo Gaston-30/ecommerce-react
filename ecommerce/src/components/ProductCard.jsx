@@ -35,7 +35,7 @@ function ProductCard({ product }) {
       >
 
         <motion.img
-          src={product.imagen}
+          src={product.imagenes?.[0]}
           alt={product.nombre}
           style={styles.image}
           whileHover={
@@ -94,26 +94,14 @@ const styles = {
     textDecoration: "none",
     color: "black",
     display: "block",
-    width:
-      isMobile
-        ? "160px"
-        : "240px",
+    width: isMobile ? "160px" : "240px",
     flexShrink: 0
   },
 
   card: {
-    width:
-      isMobile
-        ? "160px"
-        : "240px",
-    minWidth:
-      isMobile
-        ? "160px"
-        : "240px",
-    maxWidth:
-      isMobile
-        ? "160px"
-        : "240px",
+    width: isMobile ? "160px" : "240px",
+    minWidth: isMobile ? "160px" : "240px",
+    maxWidth: isMobile ? "160px" : "240px",
     backgroundColor: "white",
     borderRadius: "18px",
     overflow: "hidden",

@@ -231,7 +231,7 @@ function CartPage() {
                 return
               }
 
-              navigate("/checkout/address")
+              navigate("/checkout/confirm")
             }}
 
             onMouseEnter={(e) => {

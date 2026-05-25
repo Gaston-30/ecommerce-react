@@ -162,7 +162,9 @@ const styles = {
 
     width: "100%",
 
-    scrollbarWidth: "none"
+    scrollbarWidth: "none",
+
+    flexWrap: "nowrap",
   },
 
   arrow: {

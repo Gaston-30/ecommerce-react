@@ -3,14 +3,17 @@ import { useState } from "react"
 import Hero from "../components/Hero"
 import ProductSection from "../components/ProductSection"
 
-import productsData from "../data/Products"
+import useProducts from "../hooks/useProducts"
 import { useFilter } from "../context/FilterContext"
 
 function Home() {
 
+  const { products, loading } = useProducts() 
   const { selectedCategory } = useFilter()
 
-  const filteredProducts = productsData.filter((product) => {
+  if (loading) return <p>Cargando...</p>
+
+  const filteredProducts = products.filter((product) => {
 
 
     const matchesCategory =
