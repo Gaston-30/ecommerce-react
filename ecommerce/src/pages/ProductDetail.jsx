@@ -7,6 +7,7 @@ import ProductCard from "../components/ProductCard"
 import { useCart } from "../context/CartContext"
 import { useFavorites } from "../context/FavoritesContext"
 import { useAuth } from "../context/AuthContext"
+import useShipping from "../hooks/useShipping"
 
 import { motion } from "framer-motion"
 
@@ -16,7 +17,7 @@ function ProductDetail() {
   const { id } = useParams()
 
   const navigate = useNavigate()
-  
+
   const { user } = useAuth()
 
   const { products, loading } = useProducts()
@@ -26,6 +27,8 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1)  
 
   const [inCart, setInCart] = useState(false)
+
+  const { zona, loading: loadingZona, cpManual, calcularDesdeCP } = useShipping()
 
   const {
 
@@ -122,14 +125,26 @@ function ProductDetail() {
         </p>
 
         <div style={styles.shippingBox}>
-
-
-        <p>
-          Costo estimado: $5000
-        </p>
-
-
-      </div>
+          <p style={{ fontWeight: "600", color: "#3E2C23", marginBottom: "8px" }}>🚚 Envío</p>
+          {loadingZona ? (
+            <p style={{ color: "#888", fontSize: "13px" }}>Calculando...</p>
+          ) : zona ? (
+            <p style={{ color: "#555", fontSize: "14px" }}>
+              {zona.nombre} — <strong>${zona.costo.toLocaleString()}</strong>
+            </p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <p style={{ color: "#888", fontSize: "13px" }}>Ingresá tu código postal para ver el costo:</p>
+              <input
+                type="text"
+                placeholder="Ej: 5000"
+                value={cpManual}
+                onChange={(e) => calcularDesdeCP(e.target.value)}
+                style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid rgba(0,0,0,0.1)", fontSize: "14px", outline: "none", width: "140px" }}
+              />
+            </div>
+          )}
+        </div>
 
         <div>
 
@@ -271,9 +286,8 @@ function ProductDetail() {
 
             .map((p) => (
 
-          <div style={styles.cardWrapper}>
+          <div key={p.id} style={styles.cardWrapper}>
             <ProductCard
-              key={p.id}
               product={p}
             />
           </div>
@@ -324,7 +338,7 @@ const styles = {
     width: "100%",
     maxWidth: "1400px",
     margin: "0 auto",
-    alignItems: "start",
+    alignItems: "center",
     overflowX: "hidden",
     boxSizing: "border-box"
   },
@@ -347,6 +361,8 @@ const styles = {
     transition: "0.3s",
     gridArea: "image",
     justifySelf: "center",
+    alignSelf: "center",      
+    display: "block",
     boxSizing: "border-box"
   },
 
@@ -461,6 +477,7 @@ const styles = {
   },
 
   gallery: {
+    position: "relative",
     display: "flex",
     flexDirection:
       isMobile
