@@ -18,6 +18,10 @@ import SearchResults from "./pages/SearchResults"
 import ProductsPage from "./pages/ProductsPage"
 import CompleteProfile from "./pages/CompleteProfile"
 import CheckoutConfirm from "./pages/CheckoutConfirm"
+import CheckoutPayment from "./pages/CheckoutPayment"
+import CheckoutSuccess from "./pages/CheckoutSuccess"
+import CheckoutFailure from "./pages/CheckoutFailure"
+import CheckoutPending from "./pages/CheckoutPending"
 
 function App() {
 
@@ -84,6 +88,26 @@ function App() {
           element={<CompleteProfile />}
         />
 
+        <Route 
+          path="/checkout/payment" 
+          element={<CheckoutPayment />} 
+        />
+        
+        <Route 
+          path="/checkout/success" 
+          element={<CheckoutSuccess />} 
+        />
+
+        <Route 
+          path="/checkout/failure"  
+          element={<CheckoutFailure />} 
+        />
+
+        <Route 
+          path="/checkout/pending"  
+          element={<CheckoutPending />}   
+        />
+        
       </Routes>
 
       <FloatingWhatsApp />
