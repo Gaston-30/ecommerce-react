@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
             email,
             password,
             options: {
-            emailRedirectTo: "http://localhost:5173/complete-profile"
+            emailRedirectTo: `${window.location.origin.replace(':3000', ':5173')}/welcome`
             }
         })
         return error
@@ -42,11 +42,11 @@ export function AuthProvider({ children }) {
       options: { redirectTo: "http://localhost:5173" }
     })
     return error
-  }
+  } 
 
   const resetPassword = async (email) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:5173/reset-password"
+      redirectTo: `${window.location.origin.replace(':3000', ':5173')}/reset-password`
     })
     return error
   }

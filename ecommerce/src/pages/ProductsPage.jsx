@@ -100,8 +100,8 @@ const styles = {
   container: { padding: isMobile ? "20px 16px" : "40px", backgroundColor: "#F8F5F2", minHeight: "100vh" },
   title: { textAlign: "center", marginBottom: "8px", color: "#3E2C23", fontSize: isMobile ? "28px" : "36px", fontWeight: "700" },
   count: { textAlign: "center", color: "#888", fontSize: "14px", marginBottom: "32px" },
-  content: { display: "flex", gap: isMobile ? "15px" : "35px", alignItems: "flex-start", flexDirection: isMobile ? "column" : "row" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: isMobile ? "15px" : "25px", width: "100%" },
+  content: { display: "flex", gap: isMobile ? "8px" : "35px", alignItems: "flex-start", flexDirection: isMobile ? "column" : "row" },
+  grid: { display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(auto-fill, minmax(180px, 1fr))", gap: isMobile ? "12px" : "25px", width: "100%", justifyItems: "center",},
   pagination: { display: "flex", justifyContent: "center", alignItems: "center", gap: "20px", marginTop: "50px" },
   pageButton: { width: "45px", height: "45px", borderRadius: "50%", border: "none", backgroundColor: "#8B5E3C", color: "white", cursor: "pointer", fontSize: "20px" },
   pageText: { fontSize: "16px", fontWeight: "600", color: "#3E2C23" }

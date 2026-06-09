@@ -203,7 +203,7 @@ const styles = {
     left: 0,
     right: 0,
     height: "60px",
-    backgroundColor: "#F8F5F2",
+    backgroundColor: "#3E2C23",
     clipPath: "ellipse(55% 100% at 50% 100%)"
   }
 }

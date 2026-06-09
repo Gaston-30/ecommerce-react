@@ -15,6 +15,8 @@ function CheckoutPayment() {
   const [error, setError] = useState("")
   const [profile, setProfile] = useState(null)
   const [address, setAddress] = useState(null)
+  const [metodoPago, setMetodoPago] = useState(null)
+
   const isMobile = window.innerWidth <= 768
 
   const shipping = zona?.costo || 0
@@ -36,6 +38,14 @@ function CheckoutPayment() {
     setLoading(true)
     setError("")
 
+    localStorage.setItem(
+      "ultimaCompra",
+      JSON.stringify(cartItems)
+    )
+
+    localStorage.setItem("metodoPago", metodoPago)
+    localStorage.setItem("shippingCosto", shipping)
+    
     try {
       const res = await fetch("http://localhost:3000/create-preference", {
         method: "POST",
@@ -43,7 +53,8 @@ function CheckoutPayment() {
         body: JSON.stringify({
           items: cartItems,
           shipping: shipping,
-          buyer: { email: user.email }
+          buyer: { email: user.email },
+          metodoPago: metodoPago
         })
       })
 
@@ -117,17 +128,55 @@ function CheckoutPayment() {
           </div>
         )}
 
-        {/* MÉTODOS DE PAGO INFO */}
         <div style={styles.card}>
-          <h2 style={styles.sectionTitle}>💳 Métodos de pago</h2>
-          <p style={{ color: "#666", fontSize: "14px", marginBottom: "16px" }}>
-            Al hacer clic en "Pagar con MercadoPago" serás redirigido a la plataforma segura de MercadoPago donde podés pagar con:
-          </p>
-          <div style={styles.methodsGrid}>
-            {["💳 Tarjetas de débito", "💳 Naranja X", "💳 Cordobesa", "🏦 Transferencia bancaria", "💰 Efectivo (Rapipago/Pago Fácil)"].map((m, i) => (
-              <div key={i} style={styles.methodChip}>{m}</div>
-            ))}
-          </div>
+          <h2 style={styles.sectionTitle}>💳 Elegí cómo pagar</h2>
+
+          <motion.div
+            style={{
+              ...styles.metodoBtn,
+              border: metodoPago === "tarjeta" ? "2px solid #8B5E3C" : "1.5px solid #E0D5CC"
+            }}
+            onClick={() => setMetodoPago("tarjeta")}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <p style={styles.metodoTitulo}>💳 Tarjeta de crédito / débito</p>
+                <p style={styles.metodoSub}>Naranja X, Cordobesa, Visa, Mastercard y más</p>
+              </div>
+              <div style={styles.radioCircle}>
+                {metodoPago === "tarjeta" && <div style={styles.radioDot} />}
+              </div>
+            </div>
+            <p style={{ ...styles.metodoPrecio, color: "#3E2C23" }}>
+              Total: <strong>${total.toLocaleString()}</strong>
+            </p>
+          </motion.div>
+
+          <motion.div
+            style={{
+              ...styles.metodoBtn,
+              border: metodoPago === "transferencia" ? "2px solid #4A7C2F" : "1.5px solid #E0D5CC",
+              marginTop: "12px"
+            }}
+            onClick={() => setMetodoPago("transferencia")}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <p style={styles.metodoTitulo}>🏦 Transferencia / Efectivo</p>
+                <p style={styles.metodoSub}>Rapipago, Pago Fácil o transferencia bancaria</p>
+              </div>
+              <div style={styles.radioCircle}>
+                {metodoPago === "transferencia" && <div style={{ ...styles.radioDot, backgroundColor: "#4A7C2F" }} />}
+              </div>
+            </div>
+            <p style={{ ...styles.metodoPrecio, color: "#4A7C2F" }}>
+              Total con 15% OFF: <strong>${(total * 0.85).toLocaleString("es-AR", { maximumFractionDigits: 0 })}</strong>
+            </p>
+          </motion.div>
         </div>
 
         {/* ERROR */}
@@ -141,13 +190,24 @@ function CheckoutPayment() {
           </motion.p>
         )}
 
+        {/* MENSAJE SI NO ELIGIÓ MÉTODO */}
+        {!metodoPago && (
+          <p style={{ textAlign: "center", color: "#999", fontSize: "13px" }}>
+            Elegí un método de pago para continuar
+          </p>
+        )}
+
         {/* BOTÓN PAGAR */}
         <motion.button
-          style={styles.payBtn}
+          style={{
+            ...styles.payBtn,
+            opacity: metodoPago ? 1 : 0.5,
+            cursor: metodoPago ? "pointer" : "not-allowed"
+          }}
           onClick={handlePay}
-          disabled={loading}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
+          disabled={loading || !metodoPago}
+          whileHover={metodoPago ? { scale: 1.02 } : {}}
+          whileTap={metodoPago ? { scale: 0.97 } : {}}
         >
           {loading ? (
             <motion.span
@@ -207,7 +267,48 @@ const styles = {
     boxShadow: "0 8px 25px rgba(0,158,227,0.3)"
   },
   backBtn: { background: "none", border: "none", color: "#999", fontSize: "14px", cursor: "pointer", textAlign: "center" },
-  error: { color: "#e53e3e", fontSize: "14px", textAlign: "center", backgroundColor: "#fff5f5", padding: "12px", borderRadius: "10px" }
+  error: { color: "#e53e3e", fontSize: "14px", textAlign: "center", backgroundColor: "#fff5f5", padding: "12px", borderRadius: "10px" },
+  
+  metodoBtn: {
+    padding: "16px",
+    borderRadius: "12px",
+    cursor: "pointer",
+    backgroundColor: "white",
+    transition: "all 0.2s ease",
+  },
+  metodoTitulo: {
+    fontSize: "15px",
+    fontWeight: "600",
+    color: "#3E2C23",
+    margin: "0 0 4px"
+  },
+  metodoSub: {
+    fontSize: "12px",
+    color: "#999",
+    margin: 0
+  },
+  metodoPrecio: {
+    fontSize: "14px",
+    margin: "12px 0 0",
+    padding: "8px 0 0",
+    borderTop: "1px solid #F0EAE4"
+  },
+  radioCircle: {
+    width: "20px",
+    height: "20px",
+    borderRadius: "50%",
+    border: "2px solid #D6B79A",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0
+  },
+  radioDot: {
+    width: "10px",
+    height: "10px",
+    borderRadius: "50%",
+    backgroundColor: "#8B5E3C"
+  },
 }
 
 export default CheckoutPayment

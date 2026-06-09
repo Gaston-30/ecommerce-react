@@ -42,7 +42,28 @@ function ProductDetail() {
 
   const { addToCart } = useCart()
 
-  if (loading) return <p>Cargando...</p>
+  if (loading) return (
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: isMobile ? "1fr" : "120px minmax(300px, 500px) 1fr",
+      gap: isMobile ? "20px" : "40px",
+      padding: isMobile ? "16px" : "80px 20px",
+      maxWidth: "1400px",
+      margin: "0 auto"
+    }}>
+      <div className="skeleton" style={{ borderRadius: "12px", height: isMobile ? "80px" : "400px" }} />
+      <div className="skeleton" style={{ borderRadius: "20px", height: isMobile ? "260px" : "500px" }} />
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        <div className="skeleton" style={{ height: "36px", borderRadius: "8px", width: "70%" }} />
+        <div className="skeleton" style={{ height: "52px", borderRadius: "8px", width: "50%" }} />
+        <div className="skeleton" style={{ height: "20px", borderRadius: "8px", width: "80%" }} />
+        <div className="skeleton" style={{ height: "20px", borderRadius: "8px", width: "60%" }} />
+        <div className="skeleton" style={{ height: "80px", borderRadius: "12px" }} />
+        <div className="skeleton" style={{ height: "48px", borderRadius: "14px" }} />
+        <div className="skeleton" style={{ height: "48px", borderRadius: "14px" }} />
+      </div>
+    </div>
+  )
 
   const product = products.find(
     (p) => p.id === Number(id)
@@ -120,21 +141,28 @@ function ProductDetail() {
 
         <p style={styles.discount}>
 
-          10% OFF pagando por transferencia o efectivo
+          15% OFF pagando por transferencia o efectivo
 
         </p>
 
         <div style={styles.shippingBox}>
-          <p style={{ fontWeight: "600", color: "#3E2C23", marginBottom: "8px" }}>🚚 Envío</p>
+          <p style={{ fontWeight: "600", color: "#3E2C23", marginBottom: "8px", fontSize: "15px" }}>
+            🚚 Envío
+          </p>
           {loadingZona ? (
-            <p style={{ color: "#888", fontSize: "13px" }}>Calculando...</p>
+            <p style={{ color: "#888", fontSize: "13px", margin: 0 }}>Calculando...</p>
           ) : zona ? (
-            <p style={{ color: "#555", fontSize: "14px" }}>
-              {zona.nombre} — <strong>${zona.costo.toLocaleString()}</strong>
+            <p style={{ color: "#555", fontSize: "14px", margin: 0 }}>
+              {zona.esLocal
+                ? "A coordinar con el vendedor"
+                : `${zona.nombre} — `}
+              {!zona.esLocal && <strong>${zona.costo.toLocaleString()}</strong>}
             </p>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <p style={{ color: "#888", fontSize: "13px" }}>Ingresá tu código postal para ver el costo:</p>
+              <p style={{ color: "#888", fontSize: "13px", margin: 0 }}>
+                Ingresá tu código postal para ver el costo:
+              </p>
               <input
                 type="text"
                 placeholder="Ej: 5000"
@@ -144,65 +172,53 @@ function ProductDetail() {
               />
             </div>
           )}
-        </div>
 
-        <div>
 
-          <h3>Colores disponibles</h3>
-
-          <div style={styles.colors}>
-
-            <div style={{
-              ...styles.color,
-              backgroundColor: "beige"
-            }} />
-
-            <div style={{
-              ...styles.color,
-              backgroundColor: "brown"
-            }} />
-
-            <div style={{
-              ...styles.color,
-              backgroundColor: "gray"
-            }} />
-
-          </div>
+     
+          {product.colores && product.colores.length > 0 && (
+            <div>
+              <h3>Colores disponibles</h3>
+              <div style={styles.colors}>
+                {product.colores.map((color, i) => (
+                  <div
+                    key={i}
+                    style={{ ...styles.color, backgroundColor: color }}
+                    title={color}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
         </div>
 
         <div style={styles.quantityContainer}>
-
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => {
-
-              if (quantity > 1) {
-                setQuantity(quantity - 1)
-              }
-
-            }}
+            style={styles.qtyBtn}
+            whileHover={{ scale: 1.1, backgroundColor: "#E8D5C0" }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => { if (quantity > 1) setQuantity(quantity - 1) }}
           >
-            -
+            −
           </motion.button>
 
-          <span>{quantity}</span>
+          <span style={{ fontSize: "16px", fontWeight: "600", color: "#3E2C23", minWidth: "24px", textAlign: "center" }}>
+            {quantity}
+          </span>
 
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => {
-              if (quantity < product.stock) setQuantity(quantity + 1)
-            }}
+            style={styles.qtyBtn}
+            whileHover={{ scale: 1.1, backgroundColor: "#E8D5C0" }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => { if (quantity < product.stock) setQuantity(quantity + 1) }}
           >
             +
           </motion.button>
+                  
 
-          <p style={{ color: "#888", fontSize: "13px" }}>
+          <p style={{ color: "#888", fontSize: "13px", margin: 0 }}>
             {product.stock} unidades disponibles
           </p>
-
         </div>
 
         <motion.button
@@ -212,6 +228,7 @@ function ProductDetail() {
             if (inCart) { navigate("/cart"); return }
             addToCart(product, quantity)
             setInCart(true)
+            window.scrollTo({ top: 0, behavior: "smooth" })
           }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.96 }}
@@ -237,6 +254,7 @@ function ProductDetail() {
             } else {
               addToFavorites(product)
             }
+            window.scrollTo({ top: 0, behavior: "smooth" })
           }}
         >
 
@@ -252,7 +270,7 @@ function ProductDetail() {
 
           <p>🔒 Compra segura</p>
 
-          <p>🚚 Envíos a todo el país</p>
+          <p>📦 Envíos a todo el país</p>
 
         </div>
 
@@ -270,35 +288,22 @@ function ProductDetail() {
 
       </div>
 
-     <div style={styles.similarSection}>
 
-        <h2>
-          Productos similares
-        </h2>
-
-        <div style={styles.similarGrid}>
-
-          {products
-
-            .filter((p) => p.id !== product.id)
-
-            .slice(0, 4)
-
-            .map((p) => (
-
-          <div key={p.id} style={styles.cardWrapper}>
-            <ProductCard
-              product={p}
-            />
-          </div>
-
-          ))}
-
-        </div>
-
-      </div>
-    </div>
-
+            <div style={styles.similarSection}>
+              <h2>Productos similares</h2>
+                <div style={styles.similarGrid}>
+                  {products
+                    .filter((p) => p.id !== product.id && p.categoria === product.categoria)
+                    .slice(0, 4)
+                    .map((p) => (
+                      <div key={p.id} style={styles.cardWrapper}>
+                        <ProductCard product={p} />
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
   )
 }
 
@@ -329,14 +334,14 @@ const styles = {
         `,
     gap:
       isMobile
-        ? "20px"
+        ? "16px"
         : "40px",
     padding:
       isMobile
         ? "16px"
         : "80px 20px",
     width: "100%",
-    maxWidth: "1400px",
+    maxWidth: isMobile ? "100%" : "1400px",
     margin: "0 auto",
     alignItems: "center",
     overflowX: "hidden",
@@ -360,7 +365,7 @@ const styles = {
       "0 15px 40px rgba(0,0,0,0.12)",
     transition: "0.3s",
     gridArea: "image",
-    justifySelf: "center",
+    justifySelf: "stretch",
     alignSelf: "center",      
     display: "block",
     boxSizing: "border-box"
@@ -372,7 +377,9 @@ const styles = {
     gap: "15px",
     gridArea: "info",
     width: "100%",
-    minWidth: 0
+    minWidth: 0,
+    overflow: "hidden",
+    boxSizing: "border-box",    
   },
 
   cartButton: {
@@ -458,22 +465,25 @@ const styles = {
   quantityContainer: {
     display: "flex",
     alignItems: "center",
-    gap: "20px",
-    backgroundColor: "#F8F5F2",
-    padding: "12px 20px",
-    borderRadius: "16px",
+    gap: "14px",
     width: "fit-content",
     maxWidth: "100%"
   },
 
-  quantityButton: {
+  qtyBtn: {
+    width: "32px",
+    height: "32px",
     border: "none",
-    width: "35px",
-    height: "35px",
-    borderRadius: "10px",
-    backgroundColor: "#D6B79A",
+    borderRadius: "8px",
+    backgroundColor: "#F8F5F2",
     cursor: "pointer",
-    fontSize: "18px"
+    fontSize: "18px",
+    fontWeight: "600",
+    color: "#3E2C23",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "inherit",
   },
 
   gallery: {
@@ -524,7 +534,7 @@ const styles = {
   },
 
   descriptionBox: {
-    gridColumn: "1 / -1",
+    gridColumn: isMobile ? "auto" : "1 / -1",
     marginTop:
       isMobile
         ? "40px"
@@ -557,23 +567,30 @@ const styles = {
         ? "40px"
         : "100px",
     textAlign: "center",
-    overflow: "hidden",
+    overflow: "visible",
     gridArea: "similar",
+    width: "100%",
+    maxWidth: "100%",   
+    minWidth: 0,
   },
 
   similarGrid: {
     marginTop: "20px",
     display: "flex",
-    gap: "16px",
-    overflowX: "auto",
-    overflowY: "hidden",
+    gap: "30px",
+    overflowX: isMobile ? "auto" : "visible",
+    overflowY: "visible",
     scrollBehavior: "smooth",
     paddingBottom: "10px",
-    alignItems: "stretch",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    alignItems: "flex-start",
     width: "100%",
+    maxWidth: "100%",
+    minWidth: 0,
     boxSizing: "border-box",
-    paddingLeft: "0px",
-    paddingRight: "0px",
+    justifyContent: isMobile ? "flex-start" : "center",
+    WebkitOverflowScrolling: "touch",
   },
 
   similarCard: {
@@ -598,11 +615,10 @@ const styles = {
   },
 
   cardWrapper: {
-    width: isMobile ? "160px" : "220px",
-    minWidth: isMobile ? "160px" : "220px",
-    maxWidth: isMobile ? "160px" : "220px",
+    width: isMobile ? "140px" : "220px",
+    minWidth: isMobile ? "140px" : "220px",
+    maxWidth: isMobile ? "140px" : "220px",
     flexShrink: 0,
-    overflow: "hidden"
   },
 
 }

@@ -88,7 +88,8 @@ function CompleteProfile() {
   const { refetch } = useProfile()
 
   // Perfil
-  const [username, setUsername] = useState("")
+  const [nombreCompleto, setNombreCompleto] = useState("")
+  const [dni, setDni] = useState("")
   const [avatarFile, setAvatarFile] = useState(null)
   const [preview, setPreview] = useState(null)
   const [currentAvatar, setCurrentAvatar] = useState(null)
@@ -113,7 +114,8 @@ function CompleteProfile() {
     supabase.from("profiles").select("*").eq("id", user.id).single()
       .then(({ data }) => {
         if (data) {
-          setUsername(data.username || "")
+          setNombreCompleto(data.nombre_completo || "")
+          setDni(data.dni || "")
           setCurrentAvatar(data.avatar_url || null)
           setIsEditing(true)
         }
@@ -223,8 +225,8 @@ function CompleteProfile() {
     e.preventDefault()
     setError("")
 
-    if (username.trim().length < 3) {
-      setError("El nombre de usuario debe tener al menos 3 caracteres")
+    if (nombreCompleto.trim().length < 3) {
+      setError("El nombre completo debe tener al menos 3 caracteres")
       return
     }
 
@@ -240,7 +242,7 @@ function CompleteProfile() {
       avatar_url = data.publicUrl
     }
 
-    const { error } = await supabase.from("profiles").upsert({ id: user.id, username, avatar_url })
+    const { error } = await supabase.from("profiles").upsert({ id: user.id, avatar_url, nombre_completo: nombreCompleto, dni: dni  })
     if (error) { setError("No se pudo guardar el perfil: " + error.message) }
     else { 
         await refetch()
@@ -277,13 +279,26 @@ function CompleteProfile() {
             </label>
           </div>
 
-          {/* USERNAME */}
-          <EditableField
-            label="Nombre de usuario"
-            value={username}
-            onSave={setUsername}
-            isEditing={isEditing}
-          />
+
+          <div style={styles.inputWrapper}>
+            <label style={styles.sectionLabel}>Nombre completo</label>
+            <EditableField
+              label="Nombre y apellido"
+              value={nombreCompleto}
+              onSave={setNombreCompleto}
+              isEditing={isEditing}
+            />
+          </div>
+
+          <div style={styles.inputWrapper}>
+            <label style={styles.sectionLabel}>DNI</label>
+            <EditableField
+              label="Número de DNI"
+              value={dni}
+              onSave={setDni}
+              isEditing={isEditing}
+            />
+          </div>
 
           <hr style={styles.divider} />
 
@@ -368,6 +383,7 @@ const styles = {
   principalBadge: { fontSize: "12px", color: "#8B5E3C", fontWeight: "600", marginBottom: "4px" },
   addAddressBtn: { padding: "12px", border: "2px dashed #D6B79A", borderRadius: "12px", backgroundColor: "transparent", color: "#8B5E3C", fontSize: "14px", cursor: "pointer", fontWeight: "500" },
   addressForm: { display: "flex", flexDirection: "column", gap: "12px", padding: "16px", backgroundColor: "#fafafa", borderRadius: "14px" },
+  inputWrapper: { display: "flex", flexDirection: "column", gap: "6px" },
 }
 
 export default CompleteProfile

@@ -207,9 +207,9 @@ useEffect(() => {
                 : "👤"
               }
             </button>
-            {user && profile?.username && (
+            {user && profile?.nombre_completo && (
               <span style={{ fontSize: "14px", color: "#3E2C23", fontWeight: "500", textDecoration: "underline" }}>
-                {profile.username}
+                {profile.nombre_completo}
               </span>
             )}
           </Link>

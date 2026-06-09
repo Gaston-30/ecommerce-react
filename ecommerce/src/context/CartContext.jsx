@@ -31,6 +31,9 @@ export function CartProvider({ children }) {
   }, [cartItems])
 
   const addToCart = (product, quantity) => {
+    localStorage.removeItem(
+    "compraProcesada"
+    )
     setCartItems(prev => {
       const existingProduct = prev.find((item) => item.id === product.id)
       const currentQty = existingProduct ? existingProduct.quantity : 0

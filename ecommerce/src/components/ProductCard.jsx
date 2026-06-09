@@ -33,10 +33,13 @@ function ProductCard({ product }) {
             whileHover={!isMobile ? { scale: 1.08 } : {}}
             transition={{ duration: 0.3 }}
           />
-          {/* BADGE categoría */}
-          {product.categoria && (
-            <span style={styles.badge}>{product.categoria}</span>
-          )}
+          <span style={{
+            ...styles.badge,
+            backgroundColor: product.stock > 0 ? "rgba(255,255,255,0.9)" : "rgba(220,50,50,0.85)",
+            color: product.stock > 0 ? "#4A7C2F" : "white"
+          }}>
+            {product.stock > 0 ? "✓ En stock" : "Sin stock"}
+          </span>
         </div>
 
         <div style={styles.info}>

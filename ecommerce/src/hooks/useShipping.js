@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext"
 const ZONAS_ENVIO = {
   CABA: { nombre: "Ciudad de Buenos Aires", costo: 3500 },
   GBA: { nombre: "Gran Buenos Aires", costo: 5500 },
+  BAIGORRIA: { nombre: "Coronel Baigorria", costo: 0, esLocal: true },
   INTERIOR: { nombre: "Interior del país", costo: 8500 }
 }
 
@@ -12,6 +13,7 @@ export const getZona = (codigoPostal) => {
   const cp = parseInt(codigoPostal)
   if (cp >= 1000 && cp <= 1499) return ZONAS_ENVIO.CABA
   if (cp >= 1600 && cp <= 1999) return ZONAS_ENVIO.GBA
+  if (cp === 5811) return ZONAS_ENVIO.BAIGORRIA
   return ZONAS_ENVIO.INTERIOR
 }
 

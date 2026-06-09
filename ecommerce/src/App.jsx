@@ -22,6 +22,7 @@ import CheckoutPayment from "./pages/CheckoutPayment"
 import CheckoutSuccess from "./pages/CheckoutSuccess"
 import CheckoutFailure from "./pages/CheckoutFailure"
 import CheckoutPending from "./pages/CheckoutPending"
+import ScrollToTop from "./components/ScrollToTop"
 
 function App() {
 
@@ -29,6 +30,8 @@ function App() {
 
     <BrowserRouter>
 
+      <ScrollToTop />
+      
       <Navbar />
 
       <Routes>

@@ -16,12 +16,12 @@ function ProductSection({ title, products }) {
 
     : products.slice(
         startIndex,
-        startIndex + 3
+        startIndex + 4
       )
 
   const nextProducts = () => {
 
-    if (startIndex + 3 < products.length) {
+    if (startIndex + 4 < products.length) {
 
       setStartIndex(startIndex + 1)
     }
@@ -68,14 +68,15 @@ function ProductSection({ title, products }) {
 
         {!isMobile && (
 
-          <button
-            onClick={prevProducts}
-            style={styles.arrow}
-          >
-
-            ←
-
-          </button>
+         <motion.button
+          onClick={prevProducts}
+          style={styles.arrow}
+          whileHover={{ backgroundColor: "#8B5E3C", color: "white", scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.18 }}
+        >
+          ‹
+        </motion.button>
 
         )}
 
@@ -94,14 +95,15 @@ function ProductSection({ title, products }) {
 
         {!isMobile && (
 
-          <button
-            onClick={nextProducts}
-            style={styles.arrow}
-          >
-
-            →
-
-          </button>
+         <motion.button
+          onClick={nextProducts}
+          style={styles.arrow}
+          whileHover={{ backgroundColor: "#8B5E3C", color: "white", scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.18 }}
+        >
+          ›
+        </motion.button>
 
         )}
 
@@ -114,82 +116,56 @@ function ProductSection({ title, products }) {
 const styles = {
 
   section: {
-
     padding: "70px 20px",
-
     display: "flex",
-
     flexDirection: "column",
-
     alignItems: "center"
   },
 
   title: {
-
     fontSize: "34px",
-
     marginBottom: "40px",
-
     fontWeight: "600",
-
     color: "#3E2C23",
-
     textAlign: "center"
   },
 
   carouselContainer: {
-
     display: "flex",
-
     alignItems: "center",
-
     gap: "25px",
-
-    width: "100%"
+    width: "100%",
+    justifyContent: "center",
   },
 
   productsContainer: {
-
     display: "flex",
-
     gap: "20px",
-
     overflowX: "auto",
-
     scrollBehavior: "smooth",
-
     paddingBottom: "10px",
-
     width: "100%",
-
     scrollbarWidth: "none",
-
     flexWrap: "nowrap",
+    justifyContent: "center",
   },
 
   arrow: {
-
-    width: "50px",
-
-    height: "50px",
-
-    borderRadius: "50%",
-
-    border: "none",
-
-    backgroundColor: "#D6B79A",
-
-    color: "#3E2C23",
-
-    fontSize: "22px",
-
+    width: "32px",
+    height: "80px",
+    borderRadius: "8px",
+    border: "1.5px solid #D6B79A",
+    backgroundColor: "white",
+    color: "#8B5E3C",
+    fontSize: "18px",
     cursor: "pointer",
-
-    transition: "0.3s",
-
-    boxShadow:
-      "0 2px 8px rgba(0,0,0,0.15)"
-  }
+    transition: "all 0.2s ease",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+  },
 }
 
 export default ProductSection

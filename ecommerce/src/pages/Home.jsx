@@ -5,6 +5,7 @@ import Hero from "../components/Hero"
 import ProductSection from "../components/ProductSection"
 import useProducts from "../hooks/useProducts"
 import { useFilter } from "../context/FilterContext"
+import CampaignBanner from "../components/CampaignBanner"
 
 function FeatureCard({ icon, title, description, delay }) {
   const ref = useRef(null)
@@ -49,6 +50,7 @@ function Home() {
 
       <Hero />
 
+      <CampaignBanner />
       {/* FEATURES */}
       <section style={stylesHome.features}>
         <FeatureCard icon="🚚" title="Envíos a todo el país" description="Entregas a toda Argentina" delay={0} />
@@ -58,7 +60,12 @@ function Home() {
       </section>
 
       {/* PRODUCTOS */}
-      <ProductSection title="Novedades" products={filteredProducts} />
+      <div id="novedades">
+        <ProductSection
+          title="Novedades"
+          products={filteredProducts}
+        />
+      </div>
       <ProductSection title="Descuentos" products={filteredProducts} />
       <ProductSection title="Festividades" products={filteredProducts} />
 

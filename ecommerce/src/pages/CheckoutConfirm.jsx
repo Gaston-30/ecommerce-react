@@ -8,6 +8,7 @@ import { useCart } from "../context/CartContext"
 const ZONAS_ENVIO = {
   CABA: { nombre: "Ciudad de Buenos Aires", costo: 3500 },
   GBA: { nombre: "Gran Buenos Aires", costo: 5500 },
+  BAIGORRIA: { nombre: "Coronel Baigorria", costo: 0, esLocal: true },
   INTERIOR: { nombre: "Interior del país", costo: 8500 }
 }
 
@@ -15,6 +16,7 @@ const getZona = (codigoPostal) => {
   const cp = parseInt(codigoPostal)
   if (cp >= 1000 && cp <= 1499) return ZONAS_ENVIO.CABA
   if (cp >= 1600 && cp <= 1999) return ZONAS_ENVIO.GBA
+  if (cp === 5811) return { nombre: "Coronel Baigorria", costo: 0, esLocal: true }
   return ZONAS_ENVIO.INTERIOR
 }
 
@@ -42,6 +44,9 @@ function CheckoutConfirm() {
   }, [user])
 
   const zona = selectedAddress ? getZona(selectedAddress.codigo_postal) : null
+  useEffect(() => {
+    if (zona?.esLocal) setMetodoEntrega("acuerdo")
+  }, [zona?.esLocal])
   const costoEnvio = metodoEntrega === "envio" ? (zona?.costo || 0) : 0
   const total = subtotal + costoEnvio
   const isMobile = window.innerWidth <= 768
@@ -80,41 +85,62 @@ function CheckoutConfirm() {
             ))}
           </div>
 
-          {/* MÉTODO DE ENTREGA */}
           <div style={styles.section}>
             <h2 style={styles.sectionTitle}>Método de entrega</h2>
 
-            <div
-              style={{ ...styles.optionCard, border: metodoEntrega === "envio" ? "2px solid #8B5E3C" : "1px solid rgba(0,0,0,0.08)" }}
-              onClick={() => setMetodoEntrega("envio")}
-            >
-              <div style={styles.optionLeft}>
-                <div style={{ ...styles.radio, backgroundColor: metodoEntrega === "envio" ? "#8B5E3C" : "white" }} />
-                <div>
-                  <p style={styles.optionTitle}>🚚 Envío a domicilio</p>
-                  {selectedAddress && (
-                    <p style={styles.optionSubtitle}>{selectedAddress.direccion}, {selectedAddress.ciudad}</p>
-                  )}
+            {zona?.esLocal ? (
+              // ── Usuario de Coronel Baigorria ──
+              <div>
+                <div style={{ ...styles.optionCard, border: "2px solid #8B5E3C", cursor: "default" }}>
+                  <div style={styles.optionLeft}>
+                    <div style={{ ...styles.radio, backgroundColor: "#8B5E3C" }} />
+                    <div>
+                      <p style={styles.optionTitle}>🤝 Entrega acordada con el vendedor</p>
+                      <p style={styles.optionSubtitle}>Retiro en local o envío a domicilio en Coronel Baigorria</p>
+                    </div>
+                  </div>
+                  <p style={styles.optionPrice}>Gratis</p>
+                </div>
+                <div style={{ backgroundColor: "#FFF8E7", borderRadius: "10px", padding: "12px 14px", border: "1px solid #F0D080" }}>
+                  <p style={{ margin: 0, fontSize: "13px", color: "#7A5C00" }}>
+                    📍 Detectamos que sos de <strong>Coronel Baigorria</strong>. El envío a domicilio no está disponible para tu zona — coordiná la entrega directamente con la vendedora.
+                  </p>
                 </div>
               </div>
-              {zona && (
-                <p style={styles.optionPrice}>${zona.costo.toLocaleString()}</p>
-              )}
-            </div>
+            ) : (
+              // ── Resto del país ──
+              <>
+                <div
+                  style={{ ...styles.optionCard, border: metodoEntrega === "envio" ? "2px solid #8B5E3C" : "1px solid rgba(0,0,0,0.08)" }}
+                  onClick={() => setMetodoEntrega("envio")}
+                >
+                  <div style={styles.optionLeft}>
+                    <div style={{ ...styles.radio, backgroundColor: metodoEntrega === "envio" ? "#8B5E3C" : "white" }} />
+                    <div>
+                      <p style={styles.optionTitle}>🚚 Envío a domicilio</p>
+                      {selectedAddress && (
+                        <p style={styles.optionSubtitle}>{selectedAddress.direccion}, {selectedAddress.ciudad}</p>
+                      )}
+                    </div>
+                  </div>
+                  {zona && <p style={styles.optionPrice}>${zona.costo.toLocaleString()}</p>}
+                </div>
 
-            <div
-              style={{ ...styles.optionCard, border: metodoEntrega === "acuerdo" ? "2px solid #8B5E3C" : "1px solid rgba(0,0,0,0.08)" }}
-              onClick={() => setMetodoEntrega("acuerdo")}
-            >
-              <div style={styles.optionLeft}>
-                <div style={{ ...styles.radio, backgroundColor: metodoEntrega === "acuerdo" ? "#8B5E3C" : "white" }} />
-                <div>
-                  <p style={styles.optionTitle}>🤝 Acordar con el vendedor</p>
-                  <p style={styles.optionSubtitle}>Te contactamos para coordinar la entrega</p>
+                <div
+                  style={{ ...styles.optionCard, border: metodoEntrega === "acuerdo" ? "2px solid #8B5E3C" : "1px solid rgba(0,0,0,0.08)" }}
+                  onClick={() => setMetodoEntrega("acuerdo")}
+                >
+                  <div style={styles.optionLeft}>
+                    <div style={{ ...styles.radio, backgroundColor: metodoEntrega === "acuerdo" ? "#8B5E3C" : "white" }} />
+                    <div>
+                      <p style={styles.optionTitle}>🤝 Acordar con el vendedor</p>
+                      <p style={styles.optionSubtitle}>Te contactamos para coordinar la entrega</p>
+                    </div>
+                  </div>
+                  <p style={styles.optionPrice}>Gratis</p>
                 </div>
-              </div>
-              <p style={styles.optionPrice}>Gratis</p>
-            </div>
+              </>
+            )}
           </div>
 
           {/* SELECCIÓN DE DIRECCIÓN */}
