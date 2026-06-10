@@ -6,7 +6,7 @@ function useProducts() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetch("http://localhost:3000/products")
+    fetch(`${import.meta.env.VITE_API_URL}/products`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data)
