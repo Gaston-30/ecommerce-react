@@ -58,7 +58,7 @@ function CheckoutSuccess() {
       console.log("DIRECCION:", address)
 
       // Mandar email
-      await fetch("http://localhost:3000/send-order-email", {
+      await fetch(`${import.meta.env.VITE_API_URL}/create-preference`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

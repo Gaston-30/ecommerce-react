@@ -84,9 +84,9 @@ app.post("/create-preference", async (req, res) => {
           excluded_payment_types: excluded
         },
         back_urls: {
-          success: "https://wand-probably-whenever.ngrok-free.dev/checkout/success",
-          failure: "https://wand-probably-whenever.ngrok-free.dev/checkout/failure",
-          pending: "https://wand-probably-whenever.ngrok-free.dev/checkout/pending"
+          success: `${process.env.FRONTEND_URL}/checkout/success`,
+          failure: `${process.env.FRONTEND_URL}/checkout/failure`,
+          pending: `${process.env.FRONTEND_URL}/checkout/pending`
         },
         statement_descriptor: "BLANCO HOGAR"
       }
