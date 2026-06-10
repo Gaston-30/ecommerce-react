@@ -26,6 +26,19 @@ import ScrollToTop from "./components/ScrollToTop"
 
 function App() {
 
+  const SITIO_ACTIVO = false // Cambiar a true para activar el sitio
+
+  if (!SITIO_ACTIVO) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#F8F5F2" }}>
+        <div style={{ textAlign: "center", padding: "40px" }}>
+          <h1 style={{ color: "#3E2C23", fontSize: "28px", marginBottom: "12px" }}>🔒 Sitio en mantenimiento</h1>
+          <p style={{ color: "#888" }}>Volvemos pronto. ¡Gracias por tu paciencia!</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
 
     <BrowserRouter>
