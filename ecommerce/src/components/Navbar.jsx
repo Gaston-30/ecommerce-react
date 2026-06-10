@@ -113,6 +113,7 @@ useEffect(() => {
 
           </button>
 
+        {!isMobile && (
           <Link
             to="/"
             style={styles.logo}
@@ -125,7 +126,8 @@ useEffect(() => {
             />
 
           </Link>
-
+        )}
+        
         </div>
 
         {/* CENTRO */}
