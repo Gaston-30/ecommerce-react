@@ -29,7 +29,7 @@ import TermsAndConditions from "./pages/TermsAndConditions"
 
 function App() {
 
-  const SITIO_ACTIVO = false // Cambiar a true para activar el sitio
+  const SITIO_ACTIVO = true // Cambiar a true para activar el sitio
 
   if (!SITIO_ACTIVO) {
     return (
@@ -142,7 +142,7 @@ function App() {
       <FloatingWhatsApp />
 
       <CookieBanner />
-      
+
       <Footer />
 
     </BrowserRouter>
