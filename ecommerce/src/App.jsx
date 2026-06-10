@@ -23,6 +23,9 @@ import CheckoutSuccess from "./pages/CheckoutSuccess"
 import CheckoutFailure from "./pages/CheckoutFailure"
 import CheckoutPending from "./pages/CheckoutPending"
 import ScrollToTop from "./components/ScrollToTop"
+import CookieBanner from "./components/CookieBanner"
+import PrivacyPolicy from "./pages/PrivacyPolicy"
+import TermsAndConditions from "./pages/TermsAndConditions"
 
 function App() {
 
@@ -123,11 +126,23 @@ function App() {
           path="/checkout/pending"  
           element={<CheckoutPending />}   
         />
-        
+
+        <Route 
+          path="/privacidad" 
+          element={<PrivacyPolicy />} 
+        />
+
+        <Route 
+          path="/terminos" 
+          element={<TermsAndConditions />} 
+        />
+
       </Routes>
 
       <FloatingWhatsApp />
 
+      <CookieBanner />
+      
       <Footer />
 
     </BrowserRouter>
