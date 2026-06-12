@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link } from "react-router-dom"
 
+ const isMobile = window.innerWidth <= 768
+ 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false)
 
@@ -15,7 +17,7 @@ export default function CookieBanner() {
     setVisible(false)
   }
 
-  const isMobile = window.innerWidth <= 768
+ 
 
   return (
     <AnimatePresence>
