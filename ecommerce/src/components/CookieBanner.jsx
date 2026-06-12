@@ -15,14 +15,16 @@ export default function CookieBanner() {
     setVisible(false)
   }
 
+  const isMobile = window.innerWidth <= 768
+
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
           style={s.banner}
-          initial={{ y: 100, opacity: 0 }}
+          initial={isMobile ? { y: -100, opacity: 0 } : { y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
+          exit={isMobile ? { y: -100, opacity: 0 } : { y: 100, opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
         >
           <div style={s.inner}>
@@ -63,28 +65,38 @@ export default function CookieBanner() {
 const s = {
   banner: {
     position: "fixed",
-    bottom: "24px",
+    top: isMobile ? "16px" : "auto",
+    bottom: isMobile ? "auto" : "24px",
     left: "50%",
     transform: "translateX(-50%)",
-    width: "clamp(300px, 90vw, 680px)",
+    width: "clamp(300px, 92vw, 680px)",
     backgroundColor: "white",
     borderRadius: "18px",
     boxShadow: "0 8px 40px rgba(0,0,0,0.14)",
     zIndex: 9998,
-    border: "1px solid #EDE4D9"
+    border: "1px solid #EDE4D9",
+    maxHeight: isMobile ? "85vh" : "none",
+    overflowY: isMobile ? "auto" : "visible",
   },
+
   inner: {
-    padding: "20px 24px",
+    padding: isMobile ? "16px 18px" : "20px 24px",
     display: "flex",
-    alignItems: "center",
-    gap: "20px",
-    flexWrap: "wrap"
+    flexDirection: isMobile ? "column" : "row",
+    alignItems: isMobile ? "stretch" : "center",
+    gap: "16px",
   },
+
   text: { flex: 1, minWidth: "200px" },
   title: { fontWeight: "700", color: "#3E2C23", fontSize: "15px", marginBottom: "4px" },
   sub: { color: "#888", fontSize: "13px", lineHeight: "1.6" },
   link: { color: "#8B5E3C", fontWeight: "600", textDecoration: "underline" },
-  buttons: { display: "flex", gap: "10px", flexShrink: 0 },
+  buttons: {
+    display: "flex",
+    gap: "10px",
+    flexShrink: 0,
+    flexDirection: isMobile ? "column" : "row",
+  },
   btnAccept: {
     padding: "10px 22px",
     backgroundColor: "#8B5E3C",
