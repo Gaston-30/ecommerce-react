@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Link } from "react-router-dom"
 
  const isMobile = window.innerWidth <= 768
- 
+
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false)
 
@@ -67,11 +67,13 @@ export default function CookieBanner() {
 const s = {
   banner: {
     position: "fixed",
-    top: isMobile ? "16px" : "auto",
+    top: isMobile ? "12px" : "auto",
     bottom: isMobile ? "auto" : "24px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: "clamp(300px, 92vw, 680px)",
+    left: isMobile ? "12px" : "50%",
+    right: isMobile ? "12px" : "auto",
+    transform: isMobile ? "none" : "translateX(-50%)",
+    width: isMobile ? "auto" : "680px",
+    maxWidth: isMobile ? "none" : "90vw",
     backgroundColor: "white",
     borderRadius: "18px",
     boxShadow: "0 8px 40px rgba(0,0,0,0.14)",
@@ -79,6 +81,7 @@ const s = {
     border: "1px solid #EDE4D9",
     maxHeight: isMobile ? "85vh" : "none",
     overflowY: isMobile ? "auto" : "visible",
+    boxSizing: "border-box",
   },
 
   inner: {
