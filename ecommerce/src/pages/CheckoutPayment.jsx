@@ -36,7 +36,7 @@ function CheckoutPayment() {
 
   const handlePay = async () => {
     // MODO DEMO - desactivar para producción
-    if (import.meta.env.VITE_DEMO_MODE === "true") {
+    if (import.meta.env.VITE_DEMO_MODE === "false") {
     setError("🔒 Este es un sitio de demostración. El sistema de pagos está desactivado.")
     return
   }
