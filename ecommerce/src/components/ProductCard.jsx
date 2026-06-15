@@ -7,6 +7,7 @@ function ProductSection({ title, products }) {
   const scrollRef = useRef(null)
   const [startIndex, setStartIndex] = useState(0)
 
+
   // Duplicar productos para scroll infinito en mobile
   const infiniteProducts = isMobile
     ? [...products, ...products, ...products]

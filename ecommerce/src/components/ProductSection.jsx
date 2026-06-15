@@ -34,6 +34,8 @@ function ProductSection({ title, products }) {
       setStartIndex(startIndex - 1)
     }
   }
+ 
+  if (!products || products.length === 0) return null 
 
   return (
 
