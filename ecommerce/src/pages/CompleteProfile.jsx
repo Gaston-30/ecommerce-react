@@ -118,6 +118,9 @@ function CompleteProfile() {
           setDni(data.dni || "")
           setCurrentAvatar(data.avatar_url || null)
           setIsEditing(true)
+           if (data.nombre_completo && data.dni) {
+        navigate("/")
+        }
         }
         setLoadingProfile(false)
       })
