@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: "http://localhost:5173" }
+      options: { redirectTo: "redirectTo: window.location.origin" }
     })
     return error
   } 
