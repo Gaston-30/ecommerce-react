@@ -118,9 +118,6 @@ function CompleteProfile() {
           setDni(data.dni || "")
           setCurrentAvatar(data.avatar_url || null)
           setIsEditing(true)
-           if (data.nombre_completo && data.dni) {
-        navigate("/")
-        }
         }
         setLoadingProfile(false)
       })
@@ -286,19 +283,19 @@ function CompleteProfile() {
           <div style={styles.inputWrapper}>
             <label style={styles.sectionLabel}>Nombre completo</label>
             <EditableField
-              label="Nombre y apellido"
+              label="Ej: María González"
               value={nombreCompleto}
               onSave={setNombreCompleto}
               isEditing={isEditing}
             />
           </div>
 
-          <div style={styles.inputWrapper}>
-            <label style={styles.sectionLabel}>DNI</label>
+         <div style={styles.inputWrapper}>
+            <label style={styles.sectionLabel}>DNI (sin puntos)</label>
             <EditableField
-              label="Número de DNI"
+              label="Ej: 12345678"
               value={dni}
-              onSave={setDni}
+              onSave={(val) => setDni(val.replace(/\D/g, ""))}
               isEditing={isEditing}
             />
           </div>
