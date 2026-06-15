@@ -1,142 +1,144 @@
-import { useState, useRef, useEffect } from "react"
+ import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
-import ProductCard from "./ProductCard"
+import { useState } from "react"
 
-function ProductSection({ title, products }) {
+function ProductCard({ product }) {
+  const [imgLoaded, setImgLoaded] = useState(false)
   const isMobile = window.innerWidth <= 768
-  const scrollRef = useRef(null)
-  const [startIndex, setStartIndex] = useState(0)
-
-
-  // Duplicar productos para scroll infinito en mobile
-  const infiniteProducts = isMobile
-    ? [...products, ...products, ...products]
-    : products
-
-  const visibleProducts = isMobile
-    ? infiniteProducts
-    : products.slice(startIndex, startIndex + 4)
-
-  useEffect(() => {
-    if (!isMobile) return
-    const el = scrollRef.current
-    if (!el) return
-
-    // Empezar en el medio (segunda copia)
-    const cardWidth = 174 // 160px + 14px gap
-    el.scrollLeft = cardWidth * products.length
-
-    const handleScroll = () => {
-      const total = cardWidth * products.length
-      if (el.scrollLeft <= total * 0.3) {
-        el.scrollLeft += total
-      }
-      if (el.scrollLeft >= total * 1.7) {
-        el.scrollLeft -= total
-      }
-    }
-
-    el.addEventListener("scroll", handleScroll, { passive: true })
-    return () => el.removeEventListener("scroll", handleScroll)
-  }, [products, isMobile])
-
-  const nextProducts = () => {
-    if (startIndex + 4 < products.length) setStartIndex(startIndex + 1)
-  }
-  const prevProducts = () => {
-    if (startIndex > 0) setStartIndex(startIndex - 1)
-  }
 
   return (
-    <motion.section
-      style={styles.section}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-    >
-      <h2 style={styles.title}>{title}</h2>
-
-      <div style={styles.carouselContainer}>
-        {!isMobile && (
-          <motion.button
-            onClick={prevProducts}
-            style={styles.arrow}
-            whileHover={{ backgroundColor: "#8B5E3C", color: "white", scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.18 }}
-          >‹</motion.button>
-        )}
-
-        <div ref={scrollRef} style={styles.productsContainer}>
-          {visibleProducts.map((product, i) => (
-            <ProductCard key={`${product.id}-${i}`} product={product} />
-          ))}
+    <Link to={`/product/${product.id}`} style={styles.link}>
+      <motion.div
+        style={styles.card}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+        viewport={{ once: true }}
+        whileHover={!isMobile ? { y: -8, scale: 1.02, boxShadow: "0 18px 40px rgba(0,0,0,0.12)" } : {}}
+      >
+        <div style={styles.imageWrapper}>
+          {/* SKELETON mientras carga */}
+          {!imgLoaded && (
+            <motion.div
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              style={styles.imageSkeleton}
+            />
+          )}
+          <motion.img
+            src={product.imagenes?.[0]}
+            alt={product.nombre}
+            style={{ ...styles.image, opacity: imgLoaded ? 1 : 0 }}
+            onLoad={() => setImgLoaded(true)}
+            whileHover={!isMobile ? { scale: 1.08 } : {}}
+            transition={{ duration: 0.3 }}
+          />
+          <span style={{
+            ...styles.badge,
+            backgroundColor: product.stock > 0 ? "rgba(255,255,255,0.9)" : "rgba(220,50,50,0.85)",
+            color: product.stock > 0 ? "#4A7C2F" : "white"
+          }}>
+            {product.stock > 0 ? "✓ En stock" : "Sin stock"}
+          </span>
         </div>
 
-        {!isMobile && (
+        <div style={styles.info}>
+          <h3 style={styles.title}>{product.nombre}</h3>
+          <p style={styles.price}>${product.precio.toLocaleString()}</p>
           <motion.button
-            onClick={nextProducts}
-            style={styles.arrow}
-            whileHover={{ backgroundColor: "#8B5E3C", color: "white", scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.18 }}
-          >›</motion.button>
-        )}
-      </div>
-    </motion.section>
+            style={styles.button}
+            whileHover={!isMobile ? { scale: 1.04, backgroundColor: "#6B4430" } : {}}
+            whileTap={{ scale: 0.96 }}
+          >
+            Ver detalle
+          </motion.button>
+        </div>
+      </motion.div>
+    </Link>
   )
 }
 
+const isMobile = window.innerWidth <= 768
+
 const styles = {
-  section: {
-    padding: "70px 20px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
+  link: {
+    textDecoration: "none",
+    color: "black",
+    display: "block",
+    width: isMobile ? "160px" : "240px",
+    flexShrink: 0
   },
-  title: {
-    fontSize: "34px",
-    marginBottom: "40px",
-    fontWeight: "600",
-    color: "#3E2C23",
-    textAlign: "center"
-  },
-  carouselContainer: {
-    display: "flex",
-    alignItems: "center",
-    gap: "25px",
-    width: "100%",
-    justifyContent: "center",
-  },
-  productsContainer: {
-    display: "flex",
-    gap: "14px",
-    overflowX: "auto",
-    scrollBehavior: "auto",
-    paddingBottom: "10px",
-    width: "100%",
-    scrollbarWidth: "none",
-    msOverflowStyle: "none",
-    flexWrap: "nowrap",
-    justifyContent: "center",
-  },
-  arrow: {
-    width: "32px",
-    height: "80px",
-    borderRadius: "8px",
-    border: "1.5px solid #D6B79A",
+  card: {
+    width: isMobile ? "160px" : "240px",
+    minWidth: isMobile ? "160px" : "240px",
+    maxWidth: isMobile ? "160px" : "240px",
     backgroundColor: "white",
-    color: "#8B5E3C",
-    fontSize: "18px",
+    borderRadius: "18px",
+    overflow: "hidden",
+    boxSizing: "border-box",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
+    transition: "0.3s",
     cursor: "pointer",
-    transition: "all 0.2s ease",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
+    flexShrink: 0
+  },
+  imageWrapper: {
+    position: "relative",
+    overflow: "hidden",
+    height: isMobile ? "160px" : "260px",
+  },
+  imageSkeleton: {
+    position: "absolute",
+    inset: 0,
+    backgroundColor: "#E8E0D8"
+  },
+  image: {
+    width: "100%",
+    height: isMobile ? "160px" : "260px",
+    objectFit: "cover",
+    transition: "opacity 0.3s"
+  },
+  badge: {
+    position: "absolute",
+    top: "10px",
+    left: "10px",
+    backgroundColor: "rgba(255,255,255,0.9)",
+    color: "#8B5E3C",
+    fontSize: "10px",
+    fontWeight: "600",
+    padding: "4px 8px",
+    borderRadius: "6px",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+    backdropFilter: "blur(4px)"
+  },
+  info: { padding: "18px" },
+  title: {
+    color: "#3E2C23",
+    marginBottom: "10px",
+    fontSize: isMobile ? "14px" : "18px",
+    height: isMobile ? "38px" : "52px",
+    overflow: "hidden",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+  },
+  price: {
+    fontSize: isMobile ? "15px" : "18px",
+    fontWeight: "bold",
+    color: "#8B5E3C"
+  },
+  button: {
+    marginTop: "15px",
+    padding: isMobile ? "10px" : "12px",
+    border: "none",
+    borderRadius: "10px",
+    backgroundColor: "#8B5E3C",
+    color: "white",
+    cursor: "pointer",
+    transition: "0.3s",
+    width: "100%",
+    fontSize: isMobile ? "13px" : "15px"
   }
 }
 
-export default ProductSection
+export default ProductCard

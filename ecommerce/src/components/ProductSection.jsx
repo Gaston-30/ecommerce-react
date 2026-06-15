@@ -1,129 +1,99 @@
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import ProductCard from "./ProductCard"
 
 function ProductSection({ title, products }) {
+  const isMobile = window.innerWidth <= 768
+  const scrollRef = useRef(null)
+  const [startIndex, setStartIndex] = useState(0)
 
-  const [startIndex, setStartIndex] =
-    useState(0)
-
-  const isMobile =
-    window.innerWidth <= 768
+  // Duplicar productos para scroll infinito en mobile
+  const infiniteProducts = isMobile
+    ? [...products, ...products, ...products]
+    : products
 
   const visibleProducts = isMobile
+    ? infiniteProducts
+    : products.slice(startIndex, startIndex + 4)
 
-    ? products
+  useEffect(() => {
+    if (!isMobile) return
+    const el = scrollRef.current
+    if (!el) return
 
-    : products.slice(
-        startIndex,
-        startIndex + 4
-      )
+    // Empezar en el medio (segunda copia)
+    const cardWidth = 174 // 160px + 14px gap
+    el.scrollLeft = cardWidth * products.length
+
+    const handleScroll = () => {
+      const total = cardWidth * products.length
+      if (el.scrollLeft <= total * 0.3) {
+        el.scrollLeft += total
+      }
+      if (el.scrollLeft >= total * 1.7) {
+        el.scrollLeft -= total
+      }
+    }
+
+    el.addEventListener("scroll", handleScroll, { passive: true })
+    return () => el.removeEventListener("scroll", handleScroll)
+  }, [products, isMobile])
 
   const nextProducts = () => {
-
-    if (startIndex + 4 < products.length) {
-
-      setStartIndex(startIndex + 1)
-    }
+    if (startIndex + 4 < products.length) setStartIndex(startIndex + 1)
   }
-
   const prevProducts = () => {
-
-    if (startIndex > 0) {
-
-      setStartIndex(startIndex - 1)
-    }
+    if (startIndex > 0) setStartIndex(startIndex - 1)
   }
- 
-  if (!products || products.length === 0) return null 
 
   return (
-
     <motion.section
-
       style={styles.section}
-
-      initial={{
-        opacity: 0,
-        y: 50
-      }}
-
-      whileInView={{
-        opacity: 1,
-        y: 0
-      }}
-
-      transition={{
-        duration: 0.8
-      }}
-
-      viewport={{
-        once: true
-      }}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
     >
-
-      <h2 style={styles.title}>
-        {title}
-      </h2>
+      <h2 style={styles.title}>{title}</h2>
 
       <div style={styles.carouselContainer}>
-
         {!isMobile && (
-
-         <motion.button
-          onClick={prevProducts}
-          style={styles.arrow}
-          whileHover={{ backgroundColor: "#8B5E3C", color: "white", scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ duration: 0.18 }}
-        >
-          ‹
-        </motion.button>
-
+          <motion.button
+            onClick={prevProducts}
+            style={styles.arrow}
+            whileHover={{ backgroundColor: "#8B5E3C", color: "white", scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.18 }}
+          >‹</motion.button>
         )}
 
-        <div style={styles.productsContainer}>
-
-          {visibleProducts.map((product) => (
-
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
-
+        <div ref={scrollRef} style={styles.productsContainer}>
+          {visibleProducts.map((product, i) => (
+            <ProductCard key={`${product.id}-${i}`} product={product} />
           ))}
-
         </div>
 
         {!isMobile && (
-
-         <motion.button
-          onClick={nextProducts}
-          style={styles.arrow}
-          whileHover={{ backgroundColor: "#8B5E3C", color: "white", scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ duration: 0.18 }}
-        >
-          ›
-        </motion.button>
-
+          <motion.button
+            onClick={nextProducts}
+            style={styles.arrow}
+            whileHover={{ backgroundColor: "#8B5E3C", color: "white", scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.18 }}
+          >›</motion.button>
         )}
-
       </div>
-
     </motion.section>
   )
 }
 
 const styles = {
-
   section: {
     padding: "70px 20px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
   },
-
   title: {
     fontSize: "34px",
     marginBottom: "40px",
@@ -131,7 +101,6 @@ const styles = {
     color: "#3E2C23",
     textAlign: "center"
   },
-
   carouselContainer: {
     display: "flex",
     alignItems: "center",
@@ -139,19 +108,18 @@ const styles = {
     width: "100%",
     justifyContent: "center",
   },
-
   productsContainer: {
     display: "flex",
-    gap: "20px",
+    gap: "14px",
     overflowX: "auto",
-    scrollBehavior: "smooth",
+    scrollBehavior: "auto",
     paddingBottom: "10px",
     width: "100%",
     scrollbarWidth: "none",
+    msOverflowStyle: "none",
     flexWrap: "nowrap",
     justifyContent: "center",
   },
-
   arrow: {
     width: "32px",
     height: "80px",
@@ -167,7 +135,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
-  },
+  }
 }
 
 export default ProductSection
