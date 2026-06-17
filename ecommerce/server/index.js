@@ -66,7 +66,7 @@ app.post("/create-preference", async (req, res) => {
 
   const excluded = metodoPago === "transferencia"
     ? [{ id: "credit_card" }, { id: "debit_card" }]
-    : [{ id: "bank_transfer" }, { id: "ticket" }]
+    : [{ id: "bank_transfer" }, { id: "ticket" }, { id: "account_money" } ]
 
   try {
     const preference = new Preference(mp)
@@ -153,13 +153,16 @@ app.post("/send-order-email", async (req, res) => {
       doc.moveDown(0.5)
 
       // Totales
-      doc.fontSize(10).font("Helvetica")
-      doc.text(`Subtotal: $${subtotalConDescuento.toLocaleString("es-AR", { maximumFractionDigits: 0 })}`)
-      if (descuento > 0) doc.text(`Descuento (15% transferencia): aplicado`)
-      doc.text(`Envío: ${shipping === 0 ? "A coordinar" : "$" + shipping.toLocaleString("es-AR")}`)
-      doc.fontSize(12).font("Helvetica-Bold")
-      doc.text(`TOTAL: $${total.toLocaleString("es-AR", { maximumFractionDigits: 0 })}`)
-      doc.moveDown(0.5)
+      const subtotalOriginal = items.reduce((acc, item) => acc + item.precio * item.quantity, 0)
+      const montoDescontado = subtotalOriginal - subtotalConDescuento
+
+      if (descuento > 0) {
+        doc.text(`Subtotal sin descuento: $${subtotalOriginal.toLocaleString("es-AR", { maximumFractionDigits: 0 })}`)
+        doc.text(`Descuento 15%: -$${montoDescontado.toLocaleString("es-AR", { maximumFractionDigits: 2 })}`)
+        doc.text(`Subtotal final: $${subtotalConDescuento.toLocaleString("es-AR", { maximumFractionDigits: 2 })}`)
+      } else {
+        doc.text(`Subtotal: $${subtotalConDescuento.toLocaleString("es-AR", { maximumFractionDigits: 2 })}`)
+      }
 
       // Método de pago
       doc.fontSize(10).font("Helvetica")
@@ -169,7 +172,7 @@ app.post("/send-order-email", async (req, res) => {
       if (esBaigorria) {
         doc.moveDown(0.5)
         doc.fontSize(10).font("Helvetica-Bold").fillColor("#2D7A00")
-        doc.text("📍 ENTREGA LOCAL — Coronel Baigorria")
+        doc.text("ENTREGA LOCAL — Coronel Baigorria")
         doc.fontSize(9).font("Helvetica").fillColor("black")
         doc.text("Coordinar entrega o retiro en local con el comprador.")
       }
