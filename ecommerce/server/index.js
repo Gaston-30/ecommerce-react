@@ -66,7 +66,7 @@ app.post("/create-preference", async (req, res) => {
 
   const excluded = metodoPago === "transferencia"
     ? [{ id: "credit_card" }, { id: "debit_card" }]
-    : [{ id: "bank_transfer" }, { id: "ticket" }, { id: "account_money" } ]
+    : [{ id: "bank_transfer" }, { id: "ticket" } ]
 
   try {
     const preference = new Preference(mp)
