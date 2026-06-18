@@ -19,7 +19,11 @@ function CheckoutPayment() {
 
   const isMobile = window.innerWidth <= 768
 
-  const shipping = zona?.costo || 0
+  const metodoEntregaGuardado = localStorage.getItem("metodoEntrega")
+    const shipping = metodoEntregaGuardado === "acuerdo" 
+      ? 0 
+      : parseInt(localStorage.getItem("costoEnvioConfirmado") || "0")
+      
   const total = subtotal + shipping
 
   useEffect(() => {
@@ -36,7 +40,7 @@ function CheckoutPayment() {
 
   const handlePay = async () => {
     // MODO DEMO - desactivar para producción
-    if (import.meta.env.VITE_DEMO_MODE === "false") {
+    if (import.meta.env.VITE_DEMO_MODE === "true") {
     setError("🔒 Este es un sitio de demostración. El sistema de pagos está desactivado.")
     return
   }
