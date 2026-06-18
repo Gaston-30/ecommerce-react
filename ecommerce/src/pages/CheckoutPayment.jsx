@@ -23,8 +23,10 @@ function CheckoutPayment() {
     const shipping = metodoEntregaGuardado === "acuerdo" 
       ? 0 
       : parseInt(localStorage.getItem("costoEnvioConfirmado") || "0")
-      
-  const total = subtotal + shipping
+
+  const descuento = metodoPago === "transferencia" ? 0.15 : 0
+  const subtotalConDescuento = subtotal * (1 - descuento)
+  const total = subtotalConDescuento + shipping
 
   useEffect(() => {
     if (!user) { navigate("/login"); return }
@@ -117,7 +119,14 @@ function CheckoutPayment() {
           </div>
           <div style={{ ...styles.row, marginTop: "8px" }}>
             <strong style={{ fontSize: "18px", color: "#3E2C23" }}>Total</strong>
-            <strong style={{ fontSize: "22px", color: "#8B5E3C" }}>${total.toLocaleString()}</strong>
+            <strong style={{ fontSize: "22px", color: "#8B5E3C" }}>
+              ${total.toLocaleString("es-AR", { maximumFractionDigits: 0 })}
+              {descuento > 0 && (
+                <span style={{ fontSize: "13px", color: "#4A7C2F", display: "block", fontWeight: "500" }}>
+                  (15% OFF aplicado sobre productos)
+                </span>
+              )}
+            </strong>
           </div>
         </div>
 

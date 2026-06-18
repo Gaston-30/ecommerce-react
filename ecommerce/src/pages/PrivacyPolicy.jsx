@@ -13,7 +13,7 @@ export default function PrivacyPolicy() {
         <p style={s.date}>Última actualización: junio 2026</p>
 
         <Section title="1. Responsable del tratamiento">
-          <p>Blanco Hogar (en adelante "nosotros"), con domicilio en Vélez Sarsfield 365, Coronel Baigorria, Córdoba, Argentina. CUIT: [COMPLETAR]. Contacto: <a href="mailto:blancohogar@gmail.com" style={s.link}>blancohogar@gmail.com</a></p>
+          <p>Blanco Hogar (en adelante "nosotros"), con domicilio en Vélez Sarsfield 365, Coronel Baigorria, Córdoba, Argentina. CUIT: 23-33149730-4. Contacto: <a href="mailto:blancohogar@gmail.com" style={s.link}>blancohogar@gmail.com</a></p>
         </Section>
 
         <Section title="2. Datos que recopilamos">

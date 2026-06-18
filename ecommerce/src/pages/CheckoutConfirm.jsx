@@ -134,7 +134,7 @@ function CheckoutConfirm() {
                     <div style={{ ...styles.radio, backgroundColor: metodoEntrega === "acuerdo" ? "#8B5E3C" : "white" }} />
                     <div>
                       <p style={styles.optionTitle}>🤝 Acordar con el vendedor</p>
-                      <p style={styles.optionSubtitle}>Te contactamos para coordinar la entrega</p>
+                      <p style={styles.optionSubtitle}>Coordiná la entrega directamente con la vendedora</p>
                     </div>
                   </div>
                   <p style={styles.optionPrice}>Gratis</p>

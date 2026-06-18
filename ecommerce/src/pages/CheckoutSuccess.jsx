@@ -107,7 +107,6 @@ function CheckoutSuccess() {
 
         <h1 style={styles.title}>¡Pago exitoso!</h1>
         <p style={styles.subtitle}>Tu pedido fue confirmado. Te enviamos un correo con los detalles.</p>
-        <p style={styles.info}>Nos pondremos en contacto para coordinar el envío.</p>
 
         {esBaigorria && (
           <div style={{
