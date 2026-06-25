@@ -6,10 +6,10 @@ import { useAuth } from "../context/AuthContext"
 import { useCart } from "../context/CartContext"
 
 const ZONAS_ENVIO = {
-  CABA: { nombre: "Ciudad de Buenos Aires", costo: 3500 },
-  GBA: { nombre: "Gran Buenos Aires", costo: 5500 },
+  CABA: { nombre: "Ciudad de Buenos Aires", costo: 24900 },
+  GBA: { nombre: "Gran Buenos Aires", costo: 24900 },
   BAIGORRIA: { nombre: "Coronel Baigorria", costo: 0, esLocal: true },
-  INTERIOR: { nombre: "Interior del país", costo: 8500 }
+  INTERIOR: { nombre: "Interior del país", costo: 24900 }
 }
 
 const getZona = (codigoPostal) => {

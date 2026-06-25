@@ -29,12 +29,13 @@ function Navbar() {
     useFavorites()
 
   const categorias = [
-
-    "Velas",
-
     "Alfombras",
-
-    "Sahumerios"
+    "Mantas y Textiles",
+    "Blanquería",
+    "Iluminación",
+    "Canastos y Bandejas",
+    "Floreros y Deco",
+    "Confort"
   ]
   
   const navigate = useNavigate()
@@ -707,6 +708,8 @@ const styles = {
     fontWeight: "500",
     fontSize: "16px",
     textAlign: "center",
+    fontFamily: "inherit",
+    width: "100%",   
   },
 
   subCategoryButton: {

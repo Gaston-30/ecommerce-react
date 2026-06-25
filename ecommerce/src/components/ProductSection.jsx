@@ -27,10 +27,10 @@ function ProductSection({ title, products }) {
 
     const handleScroll = () => {
       const total = cardWidth * products.length
-      if (el.scrollLeft <= total * 0.3) {
+      if (el.scrollLeft <= total * 0.5) {
         el.scrollLeft += total
       }
-      if (el.scrollLeft >= total * 1.7) {
+      if (el.scrollLeft >= total * 1.5) {
         el.scrollLeft -= total
       }
     }

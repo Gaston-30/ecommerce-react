@@ -136,6 +136,8 @@ function CampaignBanner() {
   </motion.section>
 )
 }
+const isMobile = window.innerWidth <= 768
+
 const styles = {
   banner: {
     background: "linear-gradient(135deg, #3E2C23 0%, #6B4430 50%, #8B5E3C 100%)",
@@ -185,6 +187,7 @@ const styles = {
     width: "1px",
     height: "28px",
     backgroundColor: "rgba(255,255,255,0.2)",
+    display: window.innerWidth <= 768 ? "none" : "block",
   },
   center: {
     display: "flex",
