@@ -31,7 +31,7 @@ function ProductSection({ title, products }) {
       if (el.scrollLeft >= copyWidth * 2) {
       el.scrollLeft = el.scrollLeft - copyWidth
       }
-      
+
       if (el.scrollLeft <= 0) {
       el.scrollLeft = el.scrollLeft + copyWidth
       }
@@ -120,7 +120,7 @@ const styles = {
     scrollbarWidth: "none",
     msOverflowStyle: "none",
     flexWrap: "nowrap",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   arrow: {
     width: "32px",
