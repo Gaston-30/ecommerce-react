@@ -23,22 +23,24 @@ function ProductSection({ title, products }) {
 
     // Empezar en el medio (segunda copia)
     const cardWidth = 174 // 160px + 14px gap
-    el.scrollLeft = cardWidth * products.length
+    const copyWidth = cardWidth * products.length
+    el.scrollLeft = copyWidth
 
     const handleScroll = () => {
-      const total = cardWidth * products.length
-      if (el.scrollLeft <= total * 0.5) {
-        el.scrollLeft += total
+
+      if (el.scrollLeft >= copyWidth * 2) {
+      el.scrollLeft = el.scrollLeft - copyWidth
       }
-      if (el.scrollLeft >= total * 1.5) {
-        el.scrollLeft -= total
+      
+      if (el.scrollLeft <= 0) {
+      el.scrollLeft = el.scrollLeft + copyWidth
       }
     }
 
-    el.addEventListener("scroll", handleScroll, { passive: true })
-    return () => el.removeEventListener("scroll", handleScroll)
-  }, [products, isMobile])
-
+      el.addEventListener("scroll", handleScroll, { passive: true })
+      return () => el.removeEventListener("scroll", handleScroll)
+    }, [products, isMobile])
+  
   const nextProducts = () => {
     if (startIndex + 4 < products.length) setStartIndex(startIndex + 1)
   }
