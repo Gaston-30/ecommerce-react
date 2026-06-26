@@ -120,7 +120,7 @@ const styles = {
     scrollbarWidth: "none",
     msOverflowStyle: "none",
     flexWrap: "nowrap",
-    justifyContent: "flex-start",
+    justifyContent: window.innerWidth <= 768 ? "flex-start" : "center",
   },
   arrow: {
     width: "32px",

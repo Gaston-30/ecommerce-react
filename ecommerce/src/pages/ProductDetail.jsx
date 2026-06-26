@@ -23,9 +23,7 @@ function ProductDetail() {
   const { products, loading } = useProducts()
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-  
-  const precioMostrado = varianteSeleccionada ? varianteSeleccionada.precio : product.precio  
-  
+    
   const [quantity, setQuantity] = useState(1)  
 
   const [inCart, setInCart] = useState(false)
@@ -78,7 +76,7 @@ function ProductDetail() {
   }
 
   const selectedImage = product.imagenes[selectedImageIndex]
-  
+  const precioMostrado = varianteSeleccionada ? varianteSeleccionada.precio : product.precio  
   const cuotas = (product.precio / 6).toFixed(2)
 
   return (
