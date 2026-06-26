@@ -23,11 +23,15 @@ function ProductDetail() {
   const { products, loading } = useProducts()
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-
+  
+  const precioMostrado = varianteSeleccionada ? varianteSeleccionada.precio : product.precio  
+  
   const [quantity, setQuantity] = useState(1)  
 
   const [inCart, setInCart] = useState(false)
 
+  const [varianteSeleccionada, setVarianteSeleccionada] = useState(null)
+  
   const { zona, loading: loadingZona, cpManual, calcularDesdeCP } = useShipping()
 
   const {
@@ -128,11 +132,60 @@ function ProductDetail() {
         <h1>{product.nombre}</h1>
 
         <h2 style={styles.price}>
-
-          ${product.precio}
-
+          ${precioMostrado.toLocaleString("es-AR")}
         </h2>
 
+        {product.variantes && product.variantes.length > 0 && (
+          <div>
+            <p style={{ fontWeight: "600", color: "#3E2C23", marginBottom: "10px", fontSize: "15px" }}>
+              Medida:
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+              {product.variantes.map((v, i) => {
+                const agotada = v.stock === 0
+                const seleccionada = varianteSeleccionada?.medida === v.medida
+                return (
+                  <motion.button
+                    key={i}
+                    onClick={() => !agotada && setVarianteSeleccionada(v)}
+                    style={{
+                      padding: "8px 16px",
+                      borderRadius: "8px",
+                      border: seleccionada ? "2px solid #8B5E3C" : "1.5px solid #D6B79A",
+                      backgroundColor: agotada ? "#F5F5F5" : seleccionada ? "#F5EEE6" : "white",
+                      color: agotada ? "#BBBBBB" : seleccionada ? "#8B5E3C" : "#3E2C23",
+                      fontSize: "14px",
+                      fontWeight: seleccionada ? "700" : "500",
+                      cursor: agotada ? "not-allowed" : "pointer",
+                      textDecoration: agotada ? "line-through" : "none",
+                      fontFamily: "inherit",
+                      transition: "all 0.18s ease",
+                    }}
+                    whileHover={!agotada ? { scale: 1.05 } : {}}
+                    whileTap={!agotada ? { scale: 0.97 } : {}}
+                  >
+                    {v.medida}
+                    {agotada && (
+                      <span style={{ fontSize: "10px", display: "block", color: "#BBBBBB" }}>
+                        Sin stock
+                      </span>
+                    )}
+                  </motion.button>
+                )
+              })}
+            </div>
+            {varianteSeleccionada && (
+              <motion.p
+                key={varianteSeleccionada.precio}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ marginTop: "12px", fontSize: "13px", color: "#888" }}
+              >
+                Stock disponible: {varianteSeleccionada.stock} unidades
+              </motion.p>
+            )}
+          </div>
+        )}
         <p style={styles.installments}>
 
           💳 Hasta 3 cuotas sin interés
@@ -222,22 +275,26 @@ function ProductDetail() {
         </div>
 
         <motion.button
-          style={styles.cartButton}
+          style={{
+            ...styles.cartButton,
+            opacity: (product.variantes?.length > 0 && !varianteSeleccionada) ? 0.5 : 1,
+            cursor: (product.variantes?.length > 0 && !varianteSeleccionada) ? "not-allowed" : "pointer"
+          }}
           onClick={() => {
+            if (product.variantes?.length > 0 && !varianteSeleccionada) return
             if (!user) { navigate("/register"); return }
             if (inCart) { navigate("/cart"); return }
-            addToCart(product, quantity)
+            addToCart({ ...product, precio: precioMostrado }, quantity)
             setInCart(true)
             window.scrollTo({ top: 0, behavior: "smooth" })
           }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.96 }}
         >
-
-          {inCart
-            ? "Ver en carrito →"
-            : "Agregar al carrito"}
-
+          {product.variantes?.length > 0 && !varianteSeleccionada
+            ? "Seleccioná una medida"
+            : inCart ? "Ver en carrito →" : "Agregar al carrito"
+          }
         </motion.button>
 
         <motion.button
