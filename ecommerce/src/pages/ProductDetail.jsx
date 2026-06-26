@@ -261,14 +261,20 @@ function ProductDetail() {
             style={styles.qtyBtn}
             whileHover={{ scale: 1.1, backgroundColor: "#E8D5C0" }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => { if (quantity < product.stock) setQuantity(quantity + 1) }}
+            onClick={() => { 
+              const stockMax = varianteSeleccionada ? varianteSeleccionada.stock : product.stock
+              if (quantity < stockMax) setQuantity(quantity + 1) 
+            }}
           >
             +
           </motion.button>
                   
 
           <p style={{ color: "#888", fontSize: "13px", margin: 0 }}>
-            {product.stock} unidades disponibles
+            {varianteSeleccionada 
+              ? `${varianteSeleccionada.stock} unidades disponibles`
+              : `${product.stock} unidades disponibles`
+            }
           </p>
         </div>
 
