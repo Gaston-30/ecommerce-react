@@ -29,7 +29,9 @@ function ProductDetail() {
   const [inCart, setInCart] = useState(false)
 
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null)
-  
+
+  const [colorSeleccionado, setColorSeleccionado] = useState(null)
+
   const [showEnvio, setShowEnvio] = useState(false)
 
   const [showPagos, setShowPagos] = useState(false)
@@ -82,7 +84,14 @@ function ProductDetail() {
   const selectedImage = product.imagenes[selectedImageIndex]
   const precioMostrado = varianteSeleccionada ? varianteSeleccionada.precio : product.precio  
   const cuotas = (product.precio / 6).toFixed(2)
+  const coloresDisponibles = product.variantes
+    ? [...new Set(product.variantes.map(v => v.color).filter(Boolean))]
+    : []
 
+  const medidasParaColor = colorSeleccionado
+    ? product.variantes.filter(v => v.color === colorSeleccionado)
+    : product.variantes
+    
   return (
 
     <div style={styles.container}>
@@ -139,13 +148,47 @@ function ProductDetail() {
 
         {product.variantes && product.variantes.length > 0 && (
           <div>
+            {/* SELECTOR DE COLOR — solo aparece si el producto tiene colores en variantes */}
+            {coloresDisponibles.length > 0 && (
+              <div style={{ marginBottom: "16px" }}>
+                <p style={{ fontWeight: "600", color: "#3E2C23", marginBottom: "10px", fontSize: "15px" }}>
+                  Color:
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                  {coloresDisponibles.map((color, i) => (
+                    <motion.button
+                      key={i}
+                      onClick={() => { setColorSeleccionado(color); setVarianteSeleccionada(null) }}
+                      style={{
+                        padding: "8px 16px",
+                        borderRadius: "8px",
+                        border: colorSeleccionado === color ? "2px solid #8B5E3C" : "1.5px solid #D6B79A",
+                        backgroundColor: colorSeleccionado === color ? "#F5EEE6" : "white",
+                        color: colorSeleccionado === color ? "#8B5E3C" : "#3E2C23",
+                        fontSize: "14px",
+                        fontWeight: colorSeleccionado === color ? "700" : "500",
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                        transition: "all 0.18s ease",
+                        textTransform: "capitalize"
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      {color}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <p style={{ fontWeight: "600", color: "#3E2C23", marginBottom: "10px", fontSize: "15px" }}>
               Medida:
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-              {product.variantes.map((v, i) => {
+              {medidasParaColor.map((v, i) => {
                 const agotada = v.stock === 0
-                const seleccionada = varianteSeleccionada?.medida === v.medida
+                const seleccionada = varianteSeleccionada?.medida === v.medida && varianteSeleccionada?.color === v.color
                 return (
                   <motion.button
                     key={i}
