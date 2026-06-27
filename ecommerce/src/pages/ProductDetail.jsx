@@ -30,6 +30,10 @@ function ProductDetail() {
 
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null)
   
+  const [showEnvio, setShowEnvio] = useState(false)
+
+  const [showPagos, setShowPagos] = useState(false)
+
   const { zona, loading: loadingZona, cpManual, calcularDesdeCP } = useShipping()
 
   const {
@@ -196,52 +200,112 @@ function ProductDetail() {
 
         </p>
 
-        <div style={styles.shippingBox}>
-          <p style={{ fontWeight: "600", color: "#3E2C23", marginBottom: "8px", fontSize: "15px" }}>
-            🚚 Envío
-          </p>
-          {loadingZona ? (
-            <p style={{ color: "#888", fontSize: "13px", margin: 0 }}>Calculando...</p>
-          ) : zona ? (
-            <p style={{ color: "#555", fontSize: "14px", margin: 0 }}>
-              {zona.esLocal
-                ? "A coordinar con el vendedor"
-                : `${zona.nombre} — `}
-              {!zona.esLocal && <strong>${zona.costo.toLocaleString()}</strong>}
-            </p>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <p style={{ color: "#888", fontSize: "13px", margin: 0 }}>
-                Ingresá tu código postal para ver el costo:
-              </p>
-              <input
-                type="text"
-                placeholder="Ej: 5000"
-                value={cpManual}
-                onChange={(e) => calcularDesdeCP(e.target.value)}
-                style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid rgba(0,0,0,0.1)", fontSize: "14px", outline: "none", width: "140px" }}
-              />
-            </div>
-          )}
-
-
-     
-          {product.colores && product.colores.length > 0 && (
-            <div>
-              <h3>Colores disponibles</h3>
-              <div style={styles.colors}>
-                {product.colores.map((color, i) => (
-                  <div
-                    key={i}
-                    style={{ ...styles.color, backgroundColor: color }}
-                    title={color}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
+        {/* BOTONES ENVÍO Y PAGOS */}
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <motion.button
+            style={styles.infoBtn}
+            onClick={() => setShowEnvio(true)}
+            whileHover={{ backgroundColor: "#F0E8DF" }}
+            whileTap={{ scale: 0.97 }}
+          >
+            🚚 Ver métodos de envío
+          </motion.button>
+          <motion.button
+            style={styles.infoBtn}
+            onClick={() => setShowPagos(true)}
+            whileHover={{ backgroundColor: "#F0E8DF" }}
+            whileTap={{ scale: 0.97 }}
+          >
+            💳 Ver medios de pago
+          </motion.button>
         </div>
+
+        {/* MODAL ENVÍO */}
+        {showEnvio && (
+          <div style={styles.modalOverlay} onClick={() => setShowEnvio(false)}>
+            <motion.div
+              style={styles.modal}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div style={styles.modalHeader}>
+                <h3 style={styles.modalTitle}>🚚 Métodos de envío</h3>
+                <button style={styles.closeBtn} onClick={() => setShowEnvio(false)}>✕</button>
+              </div>
+
+              <div style={styles.modalItem}>
+                <div style={{ fontSize: "28px" }}>📦</div>
+                <div>
+                  <p style={styles.modalItemTitle}>Envío a domicilio</p>
+                  <p style={styles.modalItemSub}>A todo el país por Correo Argentino</p>
+                  <p style={{ ...styles.modalItemSub, color: "#8B5E3C", fontWeight: "600" }}>$24.900</p>
+                </div>
+              </div>
+
+              <div style={styles.modalDivider} />
+
+              <div style={styles.modalItem}>
+                <div style={{ fontSize: "28px" }}>🤝</div>
+                <div>
+                  <p style={styles.modalItemTitle}>Entrega acordada con el vendedor</p>
+                  <p style={styles.modalItemSub}>Para clientes de Coronel Baigorria — retiro en local o envío a domicilio</p>
+                  <p style={{ ...styles.modalItemSub, color: "#4A7C2F", fontWeight: "600" }}>Gratis</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* MODAL PAGOS */}
+        {showPagos && (
+          <div style={styles.modalOverlay} onClick={() => setShowPagos(false)}>
+            <motion.div
+              style={styles.modal}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div style={styles.modalHeader}>
+                <h3 style={styles.modalTitle}>💳 Medios de pago</h3>
+                <button style={styles.closeBtn} onClick={() => setShowPagos(false)}>✕</button>
+              </div>
+
+              <div style={styles.modalItem}>
+                <div style={{ fontSize: "28px" }}>💳</div>
+                <div>
+                  <p style={styles.modalItemTitle}>Tarjeta de crédito / débito</p>
+                  <p style={styles.modalItemSub}>Visa, Mastercard, Naranja X, Cordobesa y más</p>
+                  <p style={{ ...styles.modalItemSub, color: "#8B5E3C", fontWeight: "600" }}>Hasta 3 cuotas sin interés</p>
+                </div>
+              </div>
+
+              <div style={styles.modalDivider} />
+
+              <div style={styles.modalItem}>
+                <div style={{ fontSize: "28px" }}>🏦</div>
+                <div>
+                  <p style={styles.modalItemTitle}>Transferencia bancaria</p>
+                  <p style={styles.modalItemSub}>Transferencia o depósito bancario</p>
+                  <p style={{ ...styles.modalItemSub, color: "#4A7C2F", fontWeight: "600" }}>15% de descuento</p>
+                </div>
+              </div>
+
+              <div style={styles.modalDivider} />
+
+              <div style={styles.modalItem}>
+                <div style={{ fontSize: "28px" }}>💵</div>
+                <div>
+                  <p style={styles.modalItemTitle}>Efectivo</p>
+                  <p style={styles.modalItemSub}>Rapipago o Pago Fácil</p>
+                  <p style={{ ...styles.modalItemSub, color: "#4A7C2F", fontWeight: "600" }}>15% de descuento</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
 
         <div style={styles.quantityContainer}>
           <motion.button
@@ -682,6 +746,78 @@ const styles = {
     flexShrink: 0,
   },
 
+  infoBtn: {
+    padding: "10px 16px",
+    border: "1.5px solid #D6B79A",
+    borderRadius: "10px",
+    backgroundColor: "white",
+    color: "#3E2C23",
+    fontSize: "13px",
+    fontWeight: "500",
+    cursor: "pointer",
+    fontFamily: "inherit",
+    transition: "all 0.18s ease",
+  },
+  modalOverlay: {
+    position: "fixed",
+    inset: 0,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    zIndex: 9000,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px",
+  },
+  modal: {
+    backgroundColor: "white",
+    borderRadius: "20px",
+    padding: "24px",
+    width: "100%",
+    maxWidth: "420px",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+  },
+  modalHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
+  },
+  modalTitle: {
+    fontSize: "18px",
+    fontWeight: "700",
+    color: "#3E2C23",
+    margin: 0,
+  },
+  closeBtn: {
+    background: "none",
+    border: "none",
+    fontSize: "18px",
+    cursor: "pointer",
+    color: "#888",
+    padding: "4px 8px",
+    borderRadius: "8px",
+  },
+  modalItem: {
+    display: "flex",
+    gap: "16px",
+    alignItems: "flex-start",
+    padding: "12px 0",
+  },
+  modalItemTitle: {
+    fontSize: "15px",
+    fontWeight: "600",
+    color: "#3E2C23",
+    margin: "0 0 4px",
+  },
+  modalItemSub: {
+    fontSize: "13px",
+    color: "#888",
+    margin: "2px 0",
+  },
+  modalDivider: {
+    height: "1px",
+    backgroundColor: "#F0E8DF",
+  },
 }
 
 export default ProductDetail
