@@ -91,7 +91,7 @@ function ProductDetail() {
   const medidasParaColor = colorSeleccionado
     ? product.variantes.filter(v => v.color === colorSeleccionado)
     : product.variantes
-    
+
   return (
 
     <div style={styles.container}>
@@ -233,7 +233,7 @@ function ProductDetail() {
         )}
         <p style={styles.installments}>
 
-          💳 Hasta 3 cuotas sin interés
+          💳 Hasta 3 cuotas sin interés con tarjeta de crédito
 
         </p>
 
